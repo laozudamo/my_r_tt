@@ -1,0 +1,6 @@
+:global(.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected::after) {
+  width: 98px;
+  box-sizing: border-box;
+  height: 46px;
+  border-top: 2px solid;
+}

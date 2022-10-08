@@ -1,0 +1,24 @@
+.the-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ant-form-item-label > label {
+  width: 80px;
+}
+
+.ant-form-item {
+  padding: 5px!important;
+}
+.ant-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.the-Modal {
+  width: 400px!important;
+}
+.ant-form-inline .ant-form-item-with-help {
+   margin-bottom: 0px!important;
+}

@@ -1,0 +1,22 @@
+.the-main {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url(../../assets/images/login.png) no-repeat ;
+  background-size: cover;
+}
+
+.login-form {
+  background-color: #fff;
+  padding: 20px!important;
+  width: 350px;
+  border-radius: 20px;
+}
+.login-wrap {
+  display: flex;
+  justify-content: center;
+  .login-btn {
+    width: 100px;
+  }
+}
