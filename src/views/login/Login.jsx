@@ -54,7 +54,7 @@ function Login() {
         initialValues={{
           // remember: true,
           username: 'admin',
-          password: 'admin123456',
+          password: 'admin',
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}

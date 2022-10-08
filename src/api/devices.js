@@ -40,10 +40,21 @@ function chassisSystemInfo () {
     })
 }
 
+// 系统日志
+
+function logInfo (params) {
+    return request({
+        method: "get",
+        url: `users/action/list`,
+        params
+    })
+}
+
 export {
     getPortInfo,
     upDatePort,
     getCardInfo,
     cardPortInfo,
     chassisSystemInfo,
+    logInfo,
 }

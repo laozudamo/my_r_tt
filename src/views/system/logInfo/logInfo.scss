@@ -1,0 +1,15 @@
+.flash-btn-box {
+  z-index: 1000;
+  position: absolute;
+  top: 8px;
+  right: 10px;
+}
+.main-content {
+  position: relative;
+}
+
+.ant-pagination {
+  margin: 5px 0px;
+  display: flex;
+  justify-content: flex-end
+}

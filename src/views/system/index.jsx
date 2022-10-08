@@ -51,11 +51,11 @@ const System = () => {
 
   const [current, setCurrent] = useState('logInfo')
 
-  function handPath(str: string) {
+  function handPath(str) {
     return str.split('/').pop()
   }
 
-  const changeRoute = (v: any) => {
+  const changeRoute = (v) => {
     nav(`${v.key}`);
     setCurrent(handPath(v.key))
     localStorage.setItem('pathName', handPath(v.key))
@@ -70,7 +70,7 @@ const System = () => {
 
   return (
     <div className="main">
-      <div>
+      <div className='nav-menu'>
         <Menu
           onClick={changeRoute}
           selectedKeys={[current]}
@@ -83,7 +83,7 @@ const System = () => {
         </Button> */}
       </div>
 
-      <div style={{ width: '100%' }}>
+      <div className='right-content' style={{ width: '100%' }}>
         <Outlet></Outlet>
       </div>
     </div>

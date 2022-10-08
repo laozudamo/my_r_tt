@@ -2,13 +2,13 @@ import {
   UserOutlined,
   SettingOutlined,
   ControlOutlined,
-  MailOutlined,
   FullscreenOutlined,
   LogoutOutlined,
   ProfileOutlined,
   DesktopOutlined,
   OrderedListOutlined,
   HddOutlined,
+  FileTextOutlined
 } from '@ant-design/icons'
 
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
@@ -68,6 +68,11 @@ export default function layout() {
       label: '监控',
       key: '/port',
       icon: <DesktopOutlined />,
+    },
+    {
+      label: '报告',
+      key: '/report',
+      icon: <FileTextOutlined />
     },
     {
       label: '模版',

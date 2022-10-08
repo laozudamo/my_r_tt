@@ -10,6 +10,7 @@ import Example from '@/views/example'
 import System from '@/views/system'
 import Servce from '@/views/servce'
 import Task from '@/views/task'
+import Report from '@/views/report'
 
 // 系统
 import Interface from '@/views/system/interface'
@@ -35,6 +36,8 @@ function App() {
             <Route path="port" element={<Port />} />
             <Route path="task" element={<Task />} />
             <Route path="example" element={<Example />} />
+            <Route path="report" element={<Report />} />
+
             <Route path="system" element={<System />} > 
               <Route path="logInfo" index element={<LogInfo />} />
               <Route path='interface' element={<Interface />} />
