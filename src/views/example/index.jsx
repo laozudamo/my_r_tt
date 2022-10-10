@@ -6,18 +6,170 @@ import React, { useState } from 'react'
 const items = [
   {
     key: '1',
-    label: '网络完全',
+    label: '4-7层测试',
+    icon: <MenuFoldOutlined />,
+    children: [
+      {
+        key: 'RFC3511',
+        label: 'RFC3511',
+        children: [
+          {
+            key: 'HTTPS',
+            label: 'HTTPS',
+            icon: <MenuFoldOutlined />,
+          },
+          {
+            key: 'HTTP',
+            label: 'HTTP',
+            icon: <MenuFoldOutlined />,
+          },
+        ],
+      },
+      {
+        key: '协议仿真',
+        label: '协议仿真',
+        children: [
+          {
+            key: 'IPsec',
+            label: 'IPsec',
+          },
+          {
+            key: 'SSL',
+            label: 'SSL',
+          },
+          {
+            key: 'SMTP',
+            label: 'SMTP',
+          },
+          {
+            key: 'FMTP',
+            label: 'FMTP',
+          },
+          {
+            key: 'POP3',
+            label: 'POP3',
+          },
+          {
+            key: 'RADIUS',
+            label: 'RADIUS',
+          },
+          {
+            key: '802.1.x',
+            label: '802.1.x',
+          },
+          {
+            key: 'DNS',
+            label: 'DNS',
+          },
+          {
+            key: 'NAC',
+            label: 'NAC',
+          },
+          {
+            key: '协议扩展',
+            label: '协议扩展',
+          },
+        ]
+      }
+    ],
+  },
+  {
+    key: '网络安全',
+    label: '网络安全',
+    icon: <MenuFoldOutlined />,
+    children: [
+      {
+        key: 'DDOS攻击',
+        label: 'DDOS攻击',
+        children: [
+          {
+            key: 'IGMP',
+            label: 'IGMP',
+          },
+          {
+            key: 'ICMP',
+            label: 'ICMP',
+          },
+          {
+            key: 'IP',
+            label: 'IP',
+          },
+          {
+            key: 'UDP',
+            label: 'UDP',
+          },
+          {
+            key: 'TCP',
+            label: 'TCP',
+          },
+          {
+            key: 'ARP',
+            label: 'ARP',
+          },
+        ]
+      },
+
+      {
+        key: '病毒攻击',
+        label: "病毒攻击",
+        children: [
+          {
+            key: '后门攻击',
+            label: '后门攻击',
+          },
+          {
+            key: '蠕虫攻击',
+            label: '蠕虫攻击',
+          },
+        ]
+      },
+      {
+        key: '模糊攻击',
+        label: '模糊攻击',
+        children: [
+          {
+            key: 'http',
+            label: 'http',
+          },
+          {
+            key: 'FTP',
+            label: 'FTP',
+          },
+          {
+            key: 'DNS',
+            label: 'DNS',
+          },
+          {
+            key: 'SMTP',
+            label: 'SMTP',
+          },
+          {
+            key: 'POP3',
+            label: 'POP3',
+          },
+        ]
+      }
+    ]
+  },
+  {
+    key: '场景复现',
+    label: '场景复现',
     icon: <MenuFoldOutlined />,
   },
   {
-    key: '2',
-    label: '网络完全',
+    key: '2-3层测试',
+    label: '2-3层测试',
     icon: <MenuFoldOutlined />,
-  },
-  {
-    key: '3',
-    label: '网络完全',
-    icon: <MenuFoldOutlined />,
+    children: [
+      {
+        key: 'RFC2511',
+        label: 'RFC2511',
+      },
+      {
+        key: 'RFC2889',
+        label: 'RFC2889',
+      }
+    ]
   },
 ]
 

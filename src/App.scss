@@ -15,7 +15,13 @@
 
 .main-content {
   position: relative!important;
+  width: 100;
   margin: 15px;
+}
+
+.right-content {
+  overflow: auto!important;
+  width: 100%;
 }
 
 .hearder {

@@ -38,7 +38,7 @@ export default function LogInfo() {
 
   const [page, setPage] = useState(1)
   const [count, setCount] = useState(0)
-  const [page_size, setPageSize] = useState(10)
+  const [page_size, setPageSize] = useState(20)
 
   function getLists() {
     const params = {
@@ -53,10 +53,10 @@ export default function LogInfo() {
     })
   }
 
-  function pageChange(p, v) {
+  function pageChange(p, s) {
     const params = {
       page: p,
-      page_size: v,
+      page_size: s,
     }
     logInfo(params).then((res) => {
       const { data, count, page } = res
@@ -85,8 +85,7 @@ export default function LogInfo() {
       />
       <Pagination
         onChange={pageChange}
-        pageSizeOptions={[10, 20, 50]}
-        defaultCurrent={1}
+        defaultPageSize={20}
         current={page}
         showSizeChanger={true}
         onShowSizeChange={(cur, size) => setPageSize(size)}

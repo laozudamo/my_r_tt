@@ -19,6 +19,9 @@ import SystemInfo from './views/system/systemInfo/systemInfo'
 import UserAdmin from './views/system/userAdmin'
 import PortSetting from './views/system/portSetting'
 
+// 模版
+import NetSource from '@/views/resource/netSource'
+
 // 登录
 import Login from '@/views/login/Login'
 
@@ -38,15 +41,17 @@ function App() {
             <Route path="example" element={<Example />} />
             <Route path="report" element={<Report />} />
 
-            <Route path="system" element={<System />} > 
+            <Route path="system" element={<System />}>
               <Route path="logInfo" index element={<LogInfo />} />
-              <Route path='interface' element={<Interface />} />
-              <Route path='systemInfo' element={<SystemInfo />} />
-              <Route path='userAdmin' element={<UserAdmin />} />
-              <Route path='portSetting' element={<PortSetting />} />
+              <Route path="interface" element={<Interface />} />
+              <Route path="systemInfo" element={<SystemInfo />} />
+              <Route path="userAdmin" element={<UserAdmin />} />
+              <Route path="portSetting" element={<PortSetting />} />
             </Route>
-           
-            <Route path="/resource" element={<Resource />} />
+
+            <Route path="resource" element={<Resource />}>
+              <Route index element={<NetSource />} />
+            </Route>
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/403" element={<Forbbiden />} />

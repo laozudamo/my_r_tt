@@ -1,0 +1,42 @@
+.btn-box {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0px;
+
+  .del-btn {
+    margin-left: 25px;
+  }
+}
+
+.the-Modal {
+  width: 65vw!important;
+}
+.model-content {
+  width: 100%;
+  display: flex;
+
+  .flex-box {
+    height: 48vh;
+    overflow: auto;
+  }
+
+  .model-client {
+    width: 30vw;
+  }
+
+  .model-serve {
+    width: 30vw;
+    margin-left: 20px;
+  }
+}
+
+.ant-form-small .ant-form-item-label > label {
+  width: 140px;
+}
+// .ant-input {
+//   width: 180px;
+// }
+
+.check-box {
+  margin: 20px 0px;
+}
