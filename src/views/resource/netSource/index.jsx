@@ -9,7 +9,6 @@ import {
   Form,
   Input,
   Checkbox,
-  Collapse,
   Select,
   Tabs,
 } from 'antd'
@@ -250,10 +249,14 @@ export default function NetSource() {
     setClientChecklist([])
     setServeChecklist([])
     setisEdit(false)
-  }
+    setId(-1)
 
-  const change = (key) => {
-    console.log(key)
+    form.resetFields()
+    let params = {
+      page,
+      page_size,
+    }
+    getList(params)
   }
 
   const submitFrom = async () => {
@@ -520,7 +523,7 @@ export default function NetSource() {
       open={isModalVisible}
       onCancel={handleCancel}
       destroyOnClose={true}>
-      <Form form={form} name="name-form" layout="inline" requiredMark={false}>
+      <Form form={form} name="name-form" layout="inline" requiredMark={false} initialValues={{'network_name': ''}}>
         <Form.Item
           name={'network_name'}
           label={'模版名称'}
