@@ -1,7 +1,8 @@
 import './index.scss'
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Button, Menu } from 'antd'
+import { Button, Menu, Image } from 'antd'
 import React, { useState } from 'react'
+import img from '@/assets/images/test.png'
 
 const items = [
   {
@@ -69,8 +70,8 @@ const items = [
             key: '协议扩展',
             label: '协议扩展',
           },
-        ]
-      }
+        ],
+      },
     ],
   },
   {
@@ -106,12 +107,12 @@ const items = [
             key: 'ARP',
             label: 'ARP',
           },
-        ]
+        ],
       },
 
       {
         key: '病毒攻击',
-        label: "病毒攻击",
+        label: '病毒攻击',
         children: [
           {
             key: '后门攻击',
@@ -121,7 +122,7 @@ const items = [
             key: '蠕虫攻击',
             label: '蠕虫攻击',
           },
-        ]
+        ],
       },
       {
         key: '模糊攻击',
@@ -136,41 +137,41 @@ const items = [
             label: 'FTP',
           },
           {
-            key: 'DNS',
+            key: '21',
             label: 'DNS',
           },
           {
-            key: 'SMTP',
+            key: '12',
             label: 'SMTP',
           },
           {
-            key: 'POP3',
+            key: '19',
             label: 'POP3',
           },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   {
     key: '场景复现',
     label: '场景复现',
     icon: <MenuFoldOutlined />,
   },
-  {
-    key: '2-3层测试',
-    label: '2-3层测试',
-    icon: <MenuFoldOutlined />,
-    children: [
-      {
-        key: 'RFC2511',
-        label: 'RFC2511',
-      },
-      {
-        key: 'RFC2889',
-        label: 'RFC2889',
-      }
-    ]
-  },
+  // {
+  //   key: '2-3层测试',
+  //   label: '2-3层测试',
+  //   icon: <MenuFoldOutlined />,
+  //   children: [
+  //     {
+  //       key: 'RFC2511',
+  //       label: 'RFC2511',
+  //     },
+  //     {
+  //       key: 'RFC2889',
+  //       label: 'RFC2889',
+  //     },
+  //   ],
+  // },
 ]
 
 const Example = () => {
@@ -179,7 +180,7 @@ const Example = () => {
   const toggleCollapsed = () => {
     setCollapsed(!collapsed)
   }
-
+  // let url = require("@/assets/images/test.png")
   return (
     <div className="main">
       <div>
@@ -194,7 +195,9 @@ const Example = () => {
           {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
         </Button> */}
       </div>
-      <div style={{ width: '100%' }}>121</div>
+      <div style={{ width: '100%' }}>
+        <Image width={1300} height={400} src={img}></Image>
+      </div>
     </div>
   )
 }

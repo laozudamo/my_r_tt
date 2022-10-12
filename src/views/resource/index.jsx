@@ -10,6 +10,16 @@ const items = [
     label: '网络拓扑模版',
     icon: <DeploymentUnitOutlined />
   },
+  {
+    key: 'fuzzSource',
+    label: '模糊测试模版',
+    icon: <DeploymentUnitOutlined />
+  },
+  {
+    key: 'webA',
+    label: 'web安全攻击',
+    icon: <DeploymentUnitOutlined />
+  },
 ]
 
 const Resource = () => {

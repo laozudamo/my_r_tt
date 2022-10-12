@@ -1,5 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment } from '@/store/test'
+// import { decrement, increment } from '@/store/test'
+import { Image } from 'antd'
+import img from './test.png'
 
 function Port() {
   const count = useSelector((state) => state.counter.value)
@@ -8,9 +10,8 @@ function Port() {
   const dispatch = useDispatch()
 
   return (
-    <div>
-      <h1>{count}</h1>
-      <button onClick={() => dispatch(decrement())}>减少</button>
+    <div className='main-content'>
+      <Image height={900} width={1100} src={img}></Image>
     </div>
   )
 }

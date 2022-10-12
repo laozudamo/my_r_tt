@@ -16,7 +16,7 @@
   display: flex;
 
   .flex-box {
-    height: 48vh;
+    height: 50vh;
     overflow: auto;
   }
 
@@ -25,7 +25,7 @@
   }
 
   .model-serve {
-    width: 30vw;
+    width: 28vw;
     margin-left: 20px;
   }
 }
@@ -36,6 +36,10 @@
 // .ant-input {
 //   width: 180px;
 // }
+.ant-select-single.ant-select-sm:not(.ant-select-customize-input) .ant-select-selector {
+  padding: 0 7px;
+  width: 171px;
+}
 
 .check-box {
   margin: 20px 0px;

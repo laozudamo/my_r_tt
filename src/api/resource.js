@@ -36,7 +36,7 @@ export function topuDel(data) {
 }
 
 //创建网络拓扑对象接口
-export function newTopu (data) {
+export function topuSave (data) {
   return request({
     url: 'configuration/create',
     method: 'post',

@@ -7,14 +7,14 @@ import {
   message,
   Modal,
   Form,
-  Row,
-  Col,
   Input,
   Checkbox,
   Collapse,
+  Select,
+  Tabs,
 } from 'antd'
 
-const { Panel } = Collapse
+const { Option } = Select
 
 import {
   PlusOutlined,
@@ -23,15 +23,15 @@ import {
   SnippetsOutlined,
   EditOutlined,
 } from '@ant-design/icons'
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import tip from '@/components/Tips'
 
-import { topuLists as list, topuDel } from '@/api/resource'
+import { topuLists as list, topuDel, topuSave, putTopu } from '@/api/resource'
 
 const nameRules = [
   {
     required: true,
-    message: '请输入用户名',
+    message: '请输入模版名称',
     trigger: 'onChange',
   },
 ]
@@ -74,11 +74,40 @@ const severPorts = [
   },
 ]
 
+function getCfgData(dom) {
+  const list = dom.map((item, i) => {
+    return item.getFieldValue()
+  })
+  return list
+}
+
+function saveData(p) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const res = await topuSave(p)
+      resolve(res)
+    } catch (error) {
+      console.log(error)
+    }
+  })
+}
+
+function editData(p) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const res = await putTopu(p)
+      resolve(res)
+    } catch (error) {
+      console.log(error)
+    }
+  })
+}
+
 export default function NetSource() {
   const [dataSource, setData] = useState([])
   const [page, setPage] = useState(1)
   const [count, setCount] = useState(0)
-  const [page_size, setPageSize] = useState(5)
+  const [page_size, setPageSize] = useState(20)
   const [rowkeys, setRowKeys] = useState([])
 
   const params = {
@@ -104,7 +133,6 @@ export default function NetSource() {
     try {
       const res = await topuDel(data)
       tip(res)
-
       getList(params)
     } catch (error) {
       console.log(error)
@@ -118,8 +146,6 @@ export default function NetSource() {
     }
     getList(params)
   }
-
-  const edit = () => {}
 
   const copy = () => {}
 
@@ -177,89 +203,259 @@ export default function NetSource() {
     {
       title: '编辑',
       key: 'edit',
-      render: () => (
-        <Button danger icon={<EditOutlined />}>
+      render: (text, record) => (
+        <Button danger icon={<EditOutlined />} onClick={() => edit(record)}>
           编辑
         </Button>
       ),
     },
   ]
 
+  const [form] = Form.useForm()
+  const clientRefs = []
+  const serveRefs = []
   const [isEdit, setisEdit] = useState(false)
-
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [clientChecklist, setClientChecklist] = useState([])
+  const [serveCheckList, setServeChecklist] = useState([])
+
+  const [id, setId] = useState(-1)
+
+  const edit = (record) => {
+    setisEdit(true)
+    setIsModalVisible(true)
+    const { network_name, server_config, client_config, id } = record
+    form.setFieldValue('network_name', network_name)
+    setId(id)
+    setClientData(client_config)
+    setServeData(server_config)
+    const clientPorts = client_config.map((item) => item.port)
+    const serverPorts = server_config.map((item) => item.port)
+
+    setClientChecklist(clientPorts)
+    setServeChecklist(serverPorts)
+  }
 
   const handleCancel = () => {
     setIsModalVisible(false)
   }
 
+  const [clientData, setClientData] = useState([])
+  const [serveData, setServeData] = useState([])
   // 表单重置
+
   const afterClose = () => {
-    console.log('afterClose')
-    // form.resetFields()
+    setClientData([])
+    setServeData([])
+    setClientChecklist([])
+    setServeChecklist([])
+    setisEdit(false)
   }
 
   const change = (key) => {
     console.log(key)
   }
 
+  const submitFrom = async () => {
+    try {
+      const { network_name } = await form.validateFields()
+      const client_config = Array.from(new Set([...getCfgData(clientRefs)]))
+      const server_config = Array.from(new Set([...getCfgData(serveRefs)]))
 
-  const refs = [] 
+      if (isEdit) {
+        if (id === -1) return
+        let params = {
+          pk: id,
+          network_name,
+          client_config,
+          server_config,
+        }
 
-  const ls =['allForm1', 'allForm2', 'allForm3'];
-
-  const [form] = Form.useForm()
-
-  const submitFrom = () => {
-    console.log(refs)
-    // form1
-    //   .validateFields()
-    //   .then((values) => {
-    //     // if (isEdit) {
-    //     //   console.log('编辑')
-    //     //   return
-    //     // }
-    //     console.log('新增', values)
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
-    // form2
-    //   .validateFields()
-    //   .then((values) => {
-    //     // if (isEdit) {
-    //     //   console.log('编辑')
-    //     //   return
-    //     // }
-    //     console.log('新增', values)
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
-    // clientFrom1
-    //   .validateFields()
-    //   .then((values) => {
-    //     // if (isEdit) {
-    //     //   console.log('编辑')
-    //     //   return
-    //     // }
-    //     console.log('新增', values)
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
+        const res = await editData(params)
+        tip(res)
+        setIsModalVisible(false)
+      } else {
+        let params = {
+          network_name,
+          client_config,
+          server_config,
+        }
+        const res = await saveData(params)
+        tip(res)
+        setIsModalVisible(false)
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
 
-  const [clientCfg, setClientCfg] = useState([])
-  const [severCfg, setSeverCfg] = useState([])
+  // 客户端
+
+  const ClientItem = (props) => {
+    const { item } = props
+    const [disable, setDisable] = useState(false)
+    useEffect(() => {
+      if (item.port_speed_detect_mode === 'Auto') {
+        setDisable(true)
+      }
+    }, [])
+    const changeMode = (v) => {
+      if (v === 'Auto') {
+        setDisable(true)
+      } else {
+        setDisable(false)
+      }
+    }
+
+    return (
+      <Form
+        ref={(r) => {
+          if (r) clientRefs.push(r)
+        }}
+        key={item.port}
+        name={item.port}
+        layout="inline"
+        initialValues={item}>
+        <Form.Item name={'src_ip_range'} label={'源IP范围'} labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item name={'netmask'} label={'网络掩码'} labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item name={'gateway'} label={'网关'} labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name={'vlan_id'}
+          label={'虚拟主机子网VLAN'}
+          labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item name={'src_mac_range'} label={'源mac范围'} labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item name={'core_bind'} label={'CPU核绑定'} labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name={'port_speed_detect_mode'}
+          label={'端口模式'}
+          labelAlign="left">
+          <Select onChange={changeMode}>
+            <Option value="Auto">自动协商</Option>
+            <Option value="Mmanual">手动</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item name={'port_speed'} label={'端口速率'} labelAlign="left">
+          <Input disabled={disable} />
+        </Form.Item>
+        <Form.Item name={'server_port'} label={'服务端口'} labelAlign="left">
+          <Select>
+            {clientPorts.map((item) => (
+              <Option key={item.value} value={item.value}>
+                {'Port' + item.value}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item name={'dst_ip_range'} label={'目的IP范围'} labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name={'dst_mac_range'}
+          label={'目的IP地址'}
+          labelAlign="left">
+          <Input />
+        </Form.Item>
+      </Form>
+    )
+  }
+
+  const ServeItem = (props) => {
+    const { item } = props
+
+    const [disable, setDisable] = useState(false)
+    useEffect(() => {
+      if (item.port_speed_detect_mode === 'Auto') setDisable(true)
+    }, [])
+    const changeMode = (v) => {
+      if (v === 'Auto') {
+        setDisable(true)
+      } else {
+        setDisable(false)
+      }
+    }
+
+    return (
+      <Form
+        ref={(r) => {
+          if (r) serveRefs.push(r)
+        }}
+        key={item.port}
+        name={item.port}
+        layout="inline"
+        initialValues={item}>
+        <Form.Item name={'src_ip_range'} label={'源IP范围'} labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item name={'netmask'} label={'网络掩码'} labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item name={'gateway'} label={'网关'} labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name={'vlan_id'}
+          label={'虚拟主机子网VLAN'}
+          labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item name={'src_mac_range'} label={'源mac范围'} labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item name={'core_bind'} label={'CPU核绑定'} labelAlign="left">
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name={'port_speed_detect_mode'}
+          label={'端口模式'}
+          labelAlign="left">
+          <Select onChange={changeMode}>
+            <Option value="Auto">自动协商</Option>
+            <Option value="Mmanual">手动</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item name={'port_speed'} label={'端口速率'} labelAlign="left">
+          <Input disabled={disable} />
+        </Form.Item>
+      </Form>
+    )
+  }
 
   const clientCheckboxChange = (checkedValue) => {
-    const data = checkedValue.map((item) => {
+    setClientChecklist(checkedValue)
+    // 拿到之前的数据 重新赋予值
+    const tmp = clientRefs.map((item) => {
+      return item.getFieldValue()
+    })
+
+    const data = checkedValue.map((item, index) => {
+      let hasPort = tmp.some((v, i) => v.port === item)
+      let j = -1
+      tmp.forEach((v, i) => {
+        if (v.port === item) {
+          j = i
+        }
+      })
+      if (hasPort && j >= 0) {
+        return tmp[j]
+      }
+
       const temData = {
         port: item,
         netmask: '12',
         gateway: '17.1.1.1',
-        src_ip_range: '12121',
+        src_ip_range: '21',
         vlan_id: '1',
         src_mac_range: '00:0c:29:dd:43:49/mac1-mac2',
         core_bind: '1',
@@ -271,98 +467,45 @@ export default function NetSource() {
       }
       return temData
     })
-    setClientCfg(data)
+
+    setClientData(data)
   }
 
+  // 服务端
   const severCheckboxChange = (checkedValue) => {
-    const data = checkedValue.map((item) => {
+    setServeChecklist(checkedValue)
+
+    const tmp = serveRefs.map((item) => {
+      return item.getFieldValue()
+    })
+    const data = checkedValue.map((item, index) => {
+      let hasPort = tmp.some((v, i) => v.port === item)
+
+      let j = -1
+      tmp.forEach((v, i) => {
+        if (v.port === item) {
+          j = i
+        }
+      })
+      if (hasPort && j >= 0) {
+        return tmp[j]
+      }
+
       const temData = {
         port: item,
-        netmask: '12',
-        gateway: '17.1.1.1',
-        src_ip_range: '12121',
+        src_ip_range: 'ip1-ip2范围/列表/单值',
+        netmask: '16',
+        gateway: '18.1.1.1',
         vlan_id: '1',
-        src_mac_range: '00:0c:29:dd:43:49/mac1-mac2',
-        core_bind: '1',
+        src_mac_range: '00:0c:29:dd:43:50',
+        core_bind: '0',
         port_speed_detect_mode: 'Auto',
-        port_speed: '1000',
-        server_port: '0',
-        dst_ip_range: '19',
-        dst_mac_range: '00:0c:29:dd:43:49',
+        port_speed: '10000',
       }
       return temData
     })
-    setSeverCfg(data)
-  }
 
-  function He({ item }) {
-    return (
-      <Collapse key={item.port}>
-        <Panel forceRender={true} key={item.port} header={`PORT-${item.port}`}>
-          <Form
-            key={item.port}
-            ref={(r)=> { if(r) refs.push(r)}}
-            name={item.port}
-            layout="inline"
-            initialValues={item}>
-            <Form.Item
-              name={'src_ip_range'}
-              label={'源IP范围'}
-              labelAlign="left">
-              <Input />
-            </Form.Item>
-            <Form.Item name={'netmask'} label={'网络掩码'} labelAlign="left">
-              <Input />
-            </Form.Item>
-            <Form.Item name={'gateway'} label={'网关'} labelAlign="left">
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name={'vlan_id'}
-              label={'虚拟主机子网VLAN'}
-              labelAlign="left">
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name={'src_mac_range'}
-              label={'源mac范围'}
-              labelAlign="left">
-              <Input />
-            </Form.Item>
-            <Form.Item name={'core_bind'} label={'CPU核绑定'} labelAlign="left">
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name={'port_speed_detect_mode'}
-              label={'端口模式'}
-              labelAlign="left">
-              <Input />
-            </Form.Item>
-            <Form.Item name={'port_speed'} label={'端口速率'} labelAlign="left">
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name={'server_port'}
-              label={'服务端口'}
-              labelAlign="left">
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name={'dst_ip_range'}
-              label={'目的IP范围'}
-              labelAlign="left">
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name={'dst_mac_range'}
-              label={'目的IP地址'}
-              labelAlign="left">
-              <Input />
-            </Form.Item>
-          </Form>
-        </Panel>
-      </Collapse>
-    )
+    setServeData(data)
   }
 
   const model = (
@@ -377,7 +520,7 @@ export default function NetSource() {
       open={isModalVisible}
       onCancel={handleCancel}
       destroyOnClose={true}>
-      <Form form={form} name="name-form" layout="inline">
+      <Form form={form} name="name-form" layout="inline" requiredMark={false}>
         <Form.Item
           name={'network_name'}
           label={'模版名称'}
@@ -390,29 +533,47 @@ export default function NetSource() {
         <div className="model-client">
           <header className="title">客户端配置</header>
           <Checkbox.Group
+            defaultValue={clientChecklist}
             onChange={clientCheckboxChange}
             className="check-box"
             options={clientPorts}
           />
-
           <div className="flex-box">
-            {clientCfg.map((item,index) => (
-              <He key={index} item={item}></He>
-            ))}
+            <Tabs>
+              {clientData.map((item, index) => {
+                return (
+                  <Tabs.TabPane
+                    tab={`Port${item.port}`}
+                    key={index}
+                    forceRender={true}>
+                    <ClientItem item={item}></ClientItem>
+                  </Tabs.TabPane>
+                )
+              })}
+            </Tabs>
           </div>
         </div>
         <div className="model-serve">
           <header className="title">服务端配置</header>
           <Checkbox.Group
+            defaultValue={serveCheckList}
             onChange={severCheckboxChange}
             className="check-box"
             options={severPorts}
           />
-
           <div className="flex-box">
-            {severCfg.map((item) => (
-              <He item={item}></He>
-            ))}
+            <Tabs>
+              {serveData.map((item, index) => {
+                return (
+                  <Tabs.TabPane
+                    tab={`Port${item.port}`}
+                    key={index}
+                    forceRender={true}>
+                    <ServeItem item={item}></ServeItem>
+                  </Tabs.TabPane>
+                )
+              })}
+            </Tabs>
           </div>
         </div>
       </div>
