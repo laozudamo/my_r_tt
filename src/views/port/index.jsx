@@ -11,7 +11,6 @@ function Port() {
 
   return (
     <div className='main-content'>
-      <Image height={900} width={1100} src={img}></Image>
     </div>
   )
 }

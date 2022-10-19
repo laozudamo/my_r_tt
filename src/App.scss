@@ -13,13 +13,12 @@
   height: calc(100vh - 46px);
 }
 
-.main-content {
-  position: relative!important;
-  width: 100;
-  margin: 15px;
-}
+// .main-content {
+//   position: relative!important;
+// }
 
 .right-content {
+  padding: 10px;
   overflow: auto!important;
   width: 100%;
 }

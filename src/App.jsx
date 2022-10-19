@@ -21,6 +21,7 @@ import PortSetting from './views/system/portSetting'
 
 // 模版
 import NetSource from '@/views/resource/netSource'
+import WebAttack from '@/views/resource/WebAttack'
 
 // 登录
 import Login from '@/views/login/Login'
@@ -51,6 +52,7 @@ function App() {
 
             <Route path="resource" element={<Resource />}>
               <Route index element={<NetSource />} />
+              <Route path='webAttack' element={<WebAttack />} />
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

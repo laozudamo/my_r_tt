@@ -196,7 +196,6 @@ const Example = () => {
         </Button> */}
       </div>
       <div style={{ width: '100%' }}>
-        <Image width={1300} height={400} src={img}></Image>
       </div>
     </div>
   )
