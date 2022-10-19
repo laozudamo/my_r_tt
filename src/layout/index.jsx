@@ -45,7 +45,6 @@ export default function layout() {
   }
   useEffect(() => {
     setCurrent(location.pathname)
-    console.log(location.pathname)
   }, [location])
 
   const items = [
@@ -76,7 +75,7 @@ export default function layout() {
     },
     {
       label: '模版',
-      key: '/resource',
+      key: '/resource/netSource',
       icon: <ProfileOutlined />,
     },
     {
