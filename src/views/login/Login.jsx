@@ -53,7 +53,7 @@ function Login() {
         labelAlign="left"
         initialValues={{
           // remember: true,
-          username: 'admin',
+          username: 'jackMa',
           password: '123456',
         }}
         onFinish={onFinish}

@@ -12,11 +12,6 @@ const items = [
     icon: <DeploymentUnitOutlined />,
   },
   {
-    key: 'fuzzSource',
-    label: '模糊测试模版',
-    icon: <DeploymentUnitOutlined />,
-  },
-  {
     key: 'webAttack',
     label: 'web安全攻击',
     icon: <DeploymentUnitOutlined />,
