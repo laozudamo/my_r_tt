@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from '@/layout'
 import Resource from '@/views/resource'
 import Port from '@/views/port'
-import Example from '@/views/example'
+import TestCase from '@/views/testCase'
 import System from '@/views/system'
 import Servce from '@/views/servce'
 import Task from '@/views/task'
@@ -18,6 +18,10 @@ import LogInfo from './views/system/logInfo'
 import SystemInfo from './views/system/systemInfo/systemInfo'
 import UserAdmin from './views/system/userAdmin'
 import PortSetting from './views/system/portSetting'
+
+// 实例
+import Dosigmp from '@/views/testCase/DosIgmp'
+import Dosicmp from '@/views/testCase/DosIcmp'
 
 // 模版
 import NetSource from '@/views/resource/netSource'
@@ -39,7 +43,13 @@ function App() {
             <Route index element={<Servce />} />
             <Route path="port" element={<Port />} />
             <Route path="task" element={<Task />} />
-            <Route path="example" element={<Example />} />
+            {/* 
+              实例
+            */}
+            <Route path="testCase" element={<TestCase />}>
+              <Route path="igmp" index element={<Dosigmp />} />
+              <Route path="icmp" index element={<Dosicmp />} />
+            </Route>
             <Route path="report" element={<Report />} />
 
             <Route path="system" element={<System />}>
@@ -51,8 +61,8 @@ function App() {
             </Route>
 
             <Route path="resource" element={<Resource />}>
-              <Route path='netSource' index element={<NetSource />} />
-              <Route path='webAttack' element={<WebAttack />} />
+              <Route path="netSource" index element={<NetSource />} />
+              <Route path="webAttack" element={<WebAttack />} />
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

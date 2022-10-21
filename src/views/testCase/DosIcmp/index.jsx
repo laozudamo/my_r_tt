@@ -1,14 +1,16 @@
-import './index.scss'
 import BtnBox from '@/components/BtnBox'
 import { Table, Input, Button, Select, Modal, Form } from 'antd'
 import { CopyOutlined, EditOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
-import { list, create, update, del } from '@/api/task.js'
+import { DDosType } from '@/api/DDos'
+
 import useCommonFn from '@/components/theFun'
+
+const { list, create, update, del, copy, detail } = DDosType('icmp')
 const { Option } = Select
 const { TextArea } = Input
 
-function Task() {
+function DosIcmp() {
   const {
     data,
     pagination,
@@ -23,7 +25,7 @@ function Task() {
     editData,
     copyData,
     afterClose,
-  } = useCommonFn(list, create, update, del, setFieldData)
+  } = useCommonFn(list, del, create, update, detail, setFieldData, copy)
 
   function setFieldData(data) {
     console.log('详细数据', data)
@@ -69,9 +71,19 @@ function Task() {
       key: 'id',
     },
     {
-      title: '名称',
-      dataIndex: 'fuzz_name',
-      key: 'fuzz_name',
+      title: '实例名称',
+      dataIndex: 'use_case_name',
+      key: 'use_case_name',
+    },
+    {
+      title: '创建者',
+      dataIndex: 'username',
+      key: 'username',
+    },
+    {
+      title: '协议类型',
+      dataIndex: 'protocol_type',
+      key: 'protocol_type',
     },
     {
       title: '创建时间',
@@ -79,14 +91,22 @@ function Task() {
       key: 'create_time',
     },
     {
-      title: '开始时间',
-      dataIndex: 'run_time',
-      key: 'run_time',
+      title: '更新时间',
+      dataIndex: 'update_time',
+      key: 'update_time',
     },
+
     {
-      title: '运行状态',
-      dataIndex: 'status',
-      key: 'status',
+      title: '编辑',
+      render: (text, record) => (
+        <Button
+          onClick={() => editData(form, record)}
+          icon={<EditOutlined />}
+          ghost
+          danger>
+          编辑
+        </Button>
+      ),
     },
 
     {
@@ -102,22 +122,10 @@ function Task() {
       ),
     },
     {
-      title: '编辑',
-      render: (text, record) => (
-        <Button
-          onClick={() => editData(form, record)}
-          icon={<EditOutlined />}
-          ghost
-          danger>
-          编辑
-        </Button>
-      ),
-    },
-    {
-      title: '查看',
+      title: '详情',
       render: () => (
         <Button icon={<CopyOutlined />} type="primary" ghost>
-          查看
+          详情
         </Button>
       ),
     },
@@ -129,25 +137,13 @@ function Task() {
         </Button>
       ),
     },
-    {
-      title: '报告',
-      render: () => (
-        <>
-          <Button icon={<CopyOutlined />} type="primary" ghost>
-            下载
-          </Button>
-          <Button icon={<CopyOutlined />} type="primary" ghost>
-            预览
-          </Button>
-        </>
-      ),
-    },
   ]
 
   const [form] = Form.useForm()
 
   return (
     <>
+      <h3>IGMP实例列表</h3>
       <BtnBox
         addData={() => addData(form)}
         deleteData={() => deleteData()}
@@ -165,13 +161,7 @@ function Task() {
         onOk={() => handleOk(form)}
         onCancel={handleCancel}
         afterClose={afterClose}>
-        <Form
-          name="form_task"
-          form={form}
-          initialValues={{
-         
-          }}>
-        
+        <Form name="form_task" form={form} initialValues={{}}>
           <Form.Item label="名称" name="name">
             <Input placeholder="请输入名称" />
           </Form.Item>
@@ -211,4 +201,4 @@ function Task() {
   )
 }
 
-export default Task
+export default DosIcmp

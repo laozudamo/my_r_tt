@@ -3,13 +3,12 @@ import { useEffect, useState } from "react";
 import tip from './Tips.js'
 
 
-function useCommonFn (attackList, attackdel, attackCreate, attackUpdate, attackDetail, setFieldData) {
+function useCommonFn (list, del, create, update, detail, setFieldData) {
   const [data, setData] = useState([])
 
   const [current, setCurrent] = useState(1)
-  const [page_size, setPageSize] = useState(20)
+  const [page_size, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
-  const [attack_class_id, setId] = useState('')
 
   const [selectedRowKeys, setkeys] = useState([])
 
@@ -33,16 +32,18 @@ function useCommonFn (attackList, attackdel, attackCreate, attackUpdate, attackD
   async function addNewData (form) {
     try {
       const value = await form.validateFields()
+
+      // TODO
       const TYPE = 'json'
       const passParams = Object.assign({}, value, { file_type: TYPE })
-      const res = await attackCreate(passParams)
+      const res = await create(passParams)
+      // TODO
       tip(res)
       setIsModalOpen(false)
       form.resetFields()
       let params = {
         page_size: page_size,
         page: current,
-        attack_class_id
       }
       getList(params)
     } catch (error) {
@@ -54,19 +55,20 @@ function useCommonFn (attackList, attackdel, attackCreate, attackUpdate, attackD
     try {
       setIsEdit(true)
       const value = await form.validateFields()
+      //TODO
       const TYPE = 'json'
-      // TODO 更新和创建的JSON格式不一样
-      const passParams = Object.assign({}, value, { file_type: TYPE, file_name: fileName, pk: theId })
-      const res = await attackUpdate(passParams)
-      tip(res)
-      setIsModalOpen(false)
-      form.resetFields()
+      const passParams = Object.assign({}, value, { file_type: TYPE, file_name: fileName, id: theId })
+      const res = await update(passParams)
+      // TODO 非通用问题
 
       let params = {
         page_size: page_size,
         page: current,
-        attack_class_id
       }
+
+      tip(res)
+      setIsModalOpen(false)
+      form.resetFields()
       getList(params)
     } catch (error) {
       console.log(error);
@@ -75,20 +77,23 @@ function useCommonFn (attackList, attackdel, attackCreate, attackUpdate, attackD
 
 
   const editData = async (form, record) => {
-    setIsEdit(true)
-    setIsModalOpen(true)
+
     try {
+      setIsEdit(true)
+      setIsModalOpen(true)
       let parmas = {
-        pk: record.id
+        id: record.id
       }
-      const { data } = await attackDetail(parmas)
-      // 判断是否有file_name属性
+      const { data } = await detail(parmas)
+
+      // 报告部分的key
       const KEY = 'file_name'
       if (KEY in data) {
         setFileName(data.file_name)
       }
 
       setTheId(data.id)
+
       setFieldData(data)
     } catch (error) {
       console.log(error)
@@ -120,11 +125,13 @@ function useCommonFn (attackList, attackdel, attackCreate, attackUpdate, attackD
   }
 
   const onChange = (page, pageSize) => {
+
+    // TODO 非通用问题
     let params = {
       page_size: pageSize,
       page: page,
-      attack_class_id
     }
+    // TODO 非通用问题
     getList(params)
 
   }
@@ -133,7 +140,6 @@ function useCommonFn (attackList, attackdel, attackCreate, attackUpdate, attackD
     let params = {
       page_size: size,
       page: current,
-      attack_class_id
     }
     getList(params)
   }
@@ -148,9 +154,10 @@ function useCommonFn (attackList, attackdel, attackCreate, attackUpdate, attackD
 
   const getList = async (params) => {
     try {
-      const { data, count, page_size, page } = await attackList(params)
+      const { data, count, page_size, page } = await list(params)
       setData(data)
       setCurrent(page)
+      console.log(count);
       setTotal(count)
       setPageSize(page_size)
 
@@ -158,7 +165,6 @@ function useCommonFn (attackList, attackdel, attackCreate, attackUpdate, attackD
       console.log(error)
     }
   }
-
 
   const copyData = () => {
     console.log("copyData")
@@ -168,7 +174,6 @@ function useCommonFn (attackList, attackdel, attackCreate, attackUpdate, attackD
     let params = {
       page_size: page_size,
       page: current,
-      attack_class_id
     }
     getList(params)
   }
@@ -185,18 +190,18 @@ function useCommonFn (attackList, attackdel, attackCreate, attackUpdate, attackD
     }
     try {
       let parmas = {
-        pkts: selectedRowKeys
+        ids: selectedRowKeys
       }
-      const res = await attackdel(parmas)
+      console.log(parmas);
+      const res = await del(parmas)
       tip(res)
+      setkeys([])
+
       let p = {
         page_size: page_size,
         page: current,
-        attack_class_id
       }
-      setkeys([])
       getList(p)
-      console.log(res);
 
     } catch (error) {
       console.log(error);
@@ -204,11 +209,9 @@ function useCommonFn (attackList, attackdel, attackCreate, attackUpdate, attackD
   }
 
   useEffect(() => {
-
     let params = {
       page_size: page_size,
       page: current,
-      attack_class_id
     }
 
     getList(params)

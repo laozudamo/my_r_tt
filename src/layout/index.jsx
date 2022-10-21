@@ -55,7 +55,7 @@ export default function layout() {
     },
     {
       label: '实例',
-      key: '/example',
+      key: '/testCase',
       icon: <HddOutlined />,
     },
     {

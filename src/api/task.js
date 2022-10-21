@@ -1,7 +1,7 @@
 import request from '@/utils/request.js'
 
 // 任务列表接口
-export function taskList (params) {
+export function list (params) {
   return request({
     url: '/tasks/task',
     method: 'get',
@@ -10,7 +10,7 @@ export function taskList (params) {
 }
 
 // 新增任务接口
-export function taskCreate (data) {
+export function create (data) {
   return request({
     url: '/tasks/task',
     method: 'post',
@@ -19,7 +19,7 @@ export function taskCreate (data) {
 }
 
 // 修改一条任务接口
-export function taskUpdate (data) {
+export function update (data) {
   return request({
     url: '/tasks/task',
     method: 'patch',
@@ -28,7 +28,7 @@ export function taskUpdate (data) {
 }
 
 // 修改一条任务接口
-export function taskDel (params) {
+export function del (params) {
   return request({
     url: '/tasks/task',
     method: 'delete',

@@ -1,8 +1,10 @@
 import './index.scss'
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { Button, Menu, Image } from 'antd'
-import React, { useState } from 'react'
-import img from '@/assets/images/test.png'
+import React, { useState, useEffect } from 'react'
+import { Outlet } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+
 
 const items = [
   {
@@ -84,27 +86,27 @@ const items = [
         label: 'DDOS攻击',
         children: [
           {
-            key: 'IGMP',
+            key: '/testCase/igmp',
             label: 'IGMP',
           },
           {
-            key: 'ICMP',
+            key: '/testCase/icmp',
             label: 'ICMP',
           },
           {
-            key: 'IP',
+            key: '/testCase/ip',
             label: 'IP',
           },
           {
-            key: 'UDP',
+            key: '/testCase/udp',
             label: 'UDP',
           },
           {
-            key: 'TCP',
+            key: '/testCase/tcp',
             label: 'TCP',
           },
           {
-            key: 'ARP',
+            key: '/testCase/arp',
             label: 'ARP',
           },
         ],
@@ -177,6 +179,19 @@ const items = [
 const Example = () => {
   const [collapsed, setCollapsed] = useState(false)
 
+  const { pathname } = useLocation()
+  const [curRoute, setRoute] = useState('')
+  const nav = useNavigate()
+  
+  const changeRoute = (v) => {
+    setRoute(v.key)
+    nav(v.key)
+  }
+  
+  useEffect(() => {
+    setRoute(pathname)
+  }, [location])
+
   const toggleCollapsed = () => {
     setCollapsed(!collapsed)
   }
@@ -185,8 +200,8 @@ const Example = () => {
     <div className="main">
       <div>
         <Menu
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
+          onClick={changeRoute}
+          selectedKeys={[curRoute]}
           mode="inline"
           theme="light"
           inlineCollapsed={collapsed}
@@ -195,7 +210,8 @@ const Example = () => {
           {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
         </Button> */}
       </div>
-      <div style={{ width: '100%' }}>
+      <div style={{ width: '100%', padding: "20px" }}>
+        <Outlet></Outlet>
       </div>
     </div>
   )
