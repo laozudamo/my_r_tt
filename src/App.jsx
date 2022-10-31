@@ -20,8 +20,14 @@ import UserAdmin from './views/system/userAdmin'
 import PortSetting from './views/system/portSetting'
 
 // 实例
-import Dosigmp from '@/views/testCase/DosIgmp'
-import Dosicmp from '@/views/testCase/DosIcmp'
+import Dosigmp from '@/views/testCase/DDos/DosIgmp'
+import Dosicmp from '@/views/testCase/DDos/DosIcmp'
+import DosIp from '@/views/testCase/DDos/DosIp'
+import DosTcp from '@/views/testCase/DDos/DosTcp'
+import DosUdp from '@/views/testCase/DDos/DosUdp'
+import DosArp from '@/views/testCase/DDos/DosArp'
+import Fuzzy from '@/views/testCase/Fuzzy'
+// import Dosicmp from '@/views/testCase/DDos/DosIcmp'
 
 // 模版
 import NetSource from '@/views/resource/netSource'
@@ -49,6 +55,11 @@ function App() {
             <Route path="testCase" element={<TestCase />}>
               <Route path="igmp" index element={<Dosigmp />} />
               <Route path="icmp" index element={<Dosicmp />} />
+              <Route path="tcp" index element={<DosTcp />} />
+              <Route path="ip" index element={<DosIp />} />
+              <Route path="udp" index element={<DosUdp />} />
+              <Route path="arp" index element={<DosArp />} />
+              <Route path="fuzzy" index element={<Fuzzy />} />
             </Route>
             <Route path="report" element={<Report />} />
 

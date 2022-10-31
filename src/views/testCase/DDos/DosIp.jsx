@@ -5,50 +5,21 @@ import {
   EditOutlined,
   MinusCircleOutlined,
   PlusOutlined,
+  CaretRightFilled
 } from '@ant-design/icons'
-import { useEffect, useState } from 'react'
 import { DDosType } from '@/api/DDos'
 
 import useCommonFn from '@/components/theFun'
 
 import { useTopo } from '@/components/topo.js'
 
-const { list, create, update, del, copy, detail } = DDosType('igmp')
+const { list, create, update, del, copy, detail } = DDosType('ip')
 const { Option } = Select
 
 const theOptions = [
   {
-    label: 'IGMPV1_REQUEST_FLOOD',
-    value: 'IGMPV1_REQUEST_FLOOD',
-  },
-
-  {
-    label: 'IGMPV1_REPLY_FLOOD',
-    value: 'IGMPV1_REPLY_FLOOD',
-  },
-  {
-    label: 'IGMPV1_GRAMR_FLOOD',
-    value: 'IGMPV1_GRAMR_FLOOD',
-  },
-  {
-    label: 'IGMPV2_REQUEST_FLOOD',
-    value: 'IGMPV2_REQUEST_FLOOD',
-  },
-  {
-    label: 'IGMPV2_GRAMR_FLOOD',
-    value: 'IGMPV2_GRAMR_FLOOD',
-  },
-  {
-    label: 'IGMPV2_REPLY_FLOOD',
-    value: 'IGMPV2_REPLY_FLOOD',
-  },
-  {
-    label: 'IGMPV2_QUERY_FLOOD',
-    value: 'IGMPV2_QUERY_FLOOD',
-  },
-  {
-    label: 'IGMPV3_REQUEST_FLOOD',
-    value: 'IGMPV3_REQUEST_FLOOD',
+    label: 'IP_FRAGMENT_FLOOD',
+    value: 'IP_FRAGMENT_FLOOD'
   },
 ]
 
@@ -72,7 +43,20 @@ function DosIcmp() {
   } = useCommonFn(list, del, create, update, detail, copy, setFieldData)
 
   function setFieldData(data) {
-    console.log('详细数据', data)
+    const {
+      net_cfg,
+      stream_mode,
+      use_case_name,
+      stream_params,
+      id,
+    } = data
+    form.setFieldsValue({
+      id,
+      net_cfg,
+      stream_mode,
+      use_case_name,
+      stream_params,
+    })
   }
 
   const rowKey = (record) => record.id
@@ -141,7 +125,7 @@ function DosIcmp() {
     {
       title: '运行',
       render: () => (
-        <Button icon={<CopyOutlined />} type="primary" ghost></Button>
+        <Button icon={<CaretRightFilled />} type="primary" ghost></Button>
       ),
     },
   ]
@@ -155,7 +139,7 @@ function DosIcmp() {
 
   return (
     <>
-      <h3>IGMP实例列表</h3>
+      <h3>IP实例列表</h3>
       <BtnBox
         addData={() => addData(form)}
         deleteData={() => deleteData()}
@@ -169,12 +153,12 @@ function DosIcmp() {
       />
       <Modal
         width="800px"
-        title={isEdit ? '编辑任务' : '新增任务'}
+        title={isEdit ? '编辑IP' : '新增IP'}
         open={isModalOpen}
         onOk={() => handleOk(form)}
         onCancel={handleCancel}
         afterClose={afterClose}>
-        <Form name="form_task" form={form} initialValues={{}}>
+        <Form name="form" form={form} initialValues={{}}>
           <Form.Item label="名称" name="use_case_name">
             <Input
               placeholder="请输入名称"
@@ -205,7 +189,7 @@ function DosIcmp() {
             </Radio.Group>
           </Form.Item>
 
-          <Form.List name="strame_params">
+          <Form.List name="stream_params">
             {(fields, { add, remove }) => (
               <>
                 {fields.map(({ key, name, ...restField }) => (
@@ -256,7 +240,7 @@ function DosIcmp() {
                     <Form.Item
                       {...restField}
                       label="时间"
-                      name={[name, 'time']}
+                      name={[name, 'attack_time']}
                       initialValue={10}
                       rules={[
                         {

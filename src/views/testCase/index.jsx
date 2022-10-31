@@ -127,30 +127,8 @@ const items = [
         ],
       },
       {
-        key: '模糊攻击',
+        key:'/testCase/fuzzy',
         label: '模糊攻击',
-        children: [
-          {
-            key: 'http',
-            label: 'http',
-          },
-          {
-            key: 'FTP',
-            label: 'FTP',
-          },
-          {
-            key: '21',
-            label: 'DNS',
-          },
-          {
-            key: '12',
-            label: 'SMTP',
-          },
-          {
-            key: '19',
-            label: 'POP3',
-          },
-        ],
       },
     ],
   },

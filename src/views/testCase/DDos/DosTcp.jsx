@@ -5,29 +5,54 @@ import {
   EditOutlined,
   MinusCircleOutlined,
   PlusOutlined,
-  CaretRightFilled,
+  CaretRightFilled
 } from '@ant-design/icons'
-import { list, create, update, del } from '@/api/task'
+import { DDosType } from '@/api/DDos'
 
 import useCommonFn from '@/components/theFun'
 
 import { useTopo } from '@/components/topo.js'
 
+const { list, create, update, del, copy, detail } = DDosType('tcp')
 const { Option } = Select
 
 const theOptions = [
   {
-    label: 'ARP_REQUEST_FLOOD',
-    value: 'ARP_REQUEST_FLOOD'
+    label: 'TCP_SYN_FLOOD',
+    value: 'TCP_SYN_FLOOD'
   },
 
   {
-    label: 'ARP_REPLY_FLOOD',
-    value: 'ARP_REPLY_FLOOD'
+    label: 'TCP_ACK_FLOOD',
+    value: 'TCP_ACK_FLOOD'
   },
   {
-    label: 'ARP_GRAMR_FLOOD',
-    value: 'ARP_GRAMR_FLOOD'
+    label: 'TCP_FIN_FLOOD',
+    value: 'TCP_FIN_FLOOD'
+  },
+  {
+    label: 'TCP_RST_FLOOD',
+    value: 'TCP_RST_FLOOD'
+  },
+  {
+    label: 'TCP_SYN_ACK_FLOOD',
+    value: 'TCP_SYN_ACK_FLOOD'
+  },
+  {
+    label: 'TCP_PUSH_ACK_FLOOD',
+    value: 'TCP_PUSH_ACK_FLOOD'
+  },
+  {
+    label: 'TCP_FIN_ACK_FLOOD',
+    value: 'TCP_FIN_ACK_FLOOD'
+  },
+  {
+    label: 'TCP_FRAGMENT_FLOOD',
+    value: 'TCP_FRAGMENT_FLOOD'
+  },
+  {
+    label: 'TCP_FACK_FLOOD',
+    value: 'TCP_FACK_FLOOD'
   }
 ]
 
@@ -48,7 +73,7 @@ function DosIcmp() {
     editData,
     copyData,
     afterClose,
-  } = useCommonFn(list, del, create, update, setFieldData)
+  } = useCommonFn(list, del, create, update, detail, copy, setFieldData)
 
   function setFieldData(data) {
     const {
@@ -76,19 +101,19 @@ function DosIcmp() {
       key: 'id',
     },
     {
-      title: '任务名称',
-      dataIndex: 'fuzz_name',
-      key: 'fuzz_name',
+      title: '实例名称',
+      dataIndex: 'use_case_name',
+      key: 'use_case_name',
     },
     {
       title: '创建者',
-      dataIndex: 'user',
-      key: 'user',
+      dataIndex: 'username',
+      key: 'username',
     },
     {
-      title: '实例列表',
-      dataIndex: 'use_case',
-      key: 'use_case',
+      title: '协议类型',
+      dataIndex: 'protocol_type',
+      key: 'protocol_type',
     },
     {
       title: '创建时间',
@@ -99,11 +124,6 @@ function DosIcmp() {
       title: '更新时间',
       dataIndex: 'update_time',
       key: 'update_time',
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'run_time',
-      key: 'run_time',
     },
 
     {
@@ -127,6 +147,14 @@ function DosIcmp() {
           ghost></Button>
       ),
     },
+    // {
+    //   title: '详情',
+    //   render: () => (
+    //     <Button icon={<CopyOutlined />} type="primary" ghost>
+    //       详情
+    //     </Button>
+    //   ),
+    // },
     {
       title: '运行',
       render: () => (
@@ -143,8 +171,8 @@ function DosIcmp() {
   }
 
   return (
-    <div style={{margin: '20px'}}>
-      <h3>任务列表</h3>
+    <>
+      <h3>IGMP实例列表</h3>
       <BtnBox
         addData={() => addData(form)}
         deleteData={() => deleteData()}
@@ -158,13 +186,13 @@ function DosIcmp() {
       />
       <Modal
         width="800px"
-        title={isEdit ? '编辑任务' : '新增任务'}
+        title={isEdit ? '编辑TCP' : '新增TCP'}
         open={isModalOpen}
         onOk={() => handleOk(form)}
         onCancel={handleCancel}
         afterClose={afterClose}>
         <Form name="form" form={form} initialValues={{}}>
-          <Form.Item label="名称" name="name">
+          <Form.Item label="名称" name="use_case_name">
             <Input
               placeholder="请输入名称"
               style={{
@@ -276,7 +304,7 @@ function DosIcmp() {
           </Form.List>
         </Form>
       </Modal>
-    </div>
+    </>
   )
 }
 

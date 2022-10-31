@@ -7,7 +7,7 @@ function useCommonFn (list, del, create, update, detail, copy, setFieldData, set
   const [data, setData] = useState([])
 
   const [current, setCurrent] = useState(1)
-  const [page_size, setPageSize] = useState(10)
+  const [page_size, setPageSize] = useState(15)
   const [total, setTotal] = useState(0)
 
   const [selectedRowKeys, setkeys] = useState([])
@@ -15,10 +15,6 @@ function useCommonFn (list, del, create, update, detail, copy, setFieldData, set
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const [isEdit, setIsEdit] = useState(false)
-
-  const [fileName, setFileName] = useState('')
-
-  const [theId, setTheId] = useState('')
 
   function getAllList () {
     let params = {
@@ -34,7 +30,6 @@ function useCommonFn (list, del, create, update, detail, copy, setFieldData, set
 
   const afterClose = () => {
     setIsEdit(false)
-    setFileName('')
   }
 
   async function addNewData (form) {
@@ -59,9 +54,10 @@ function useCommonFn (list, del, create, update, detail, copy, setFieldData, set
 
   async function updateData (form) {
     try {
-      setIsEdit(true)
       await form.validateFields()
       const value = form.getFieldValue()
+      // console.log(value)
+      // return
       const res = await update(value)
       tip(res)
       setIsModalOpen(false)
