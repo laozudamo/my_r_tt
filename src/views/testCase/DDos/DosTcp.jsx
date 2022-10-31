@@ -5,7 +5,7 @@ import {
   EditOutlined,
   MinusCircleOutlined,
   PlusOutlined,
-  CaretRightFilled
+  CaretRightFilled,
 } from '@ant-design/icons'
 import { DDosType } from '@/api/DDos'
 
@@ -19,46 +19,54 @@ const { Option } = Select
 const theOptions = [
   {
     label: 'TCP_SYN_FLOOD',
-    value: 'TCP_SYN_FLOOD'
+    value: 'TCP_SYN_FLOOD',
   },
 
   {
     label: 'TCP_ACK_FLOOD',
-    value: 'TCP_ACK_FLOOD'
+    value: 'TCP_ACK_FLOOD',
   },
   {
     label: 'TCP_FIN_FLOOD',
-    value: 'TCP_FIN_FLOOD'
+    value: 'TCP_FIN_FLOOD',
   },
   {
     label: 'TCP_RST_FLOOD',
-    value: 'TCP_RST_FLOOD'
+    value: 'TCP_RST_FLOOD',
   },
   {
     label: 'TCP_SYN_ACK_FLOOD',
-    value: 'TCP_SYN_ACK_FLOOD'
+    value: 'TCP_SYN_ACK_FLOOD',
   },
   {
     label: 'TCP_PUSH_ACK_FLOOD',
-    value: 'TCP_PUSH_ACK_FLOOD'
+    value: 'TCP_PUSH_ACK_FLOOD',
   },
   {
     label: 'TCP_FIN_ACK_FLOOD',
-    value: 'TCP_FIN_ACK_FLOOD'
+    value: 'TCP_FIN_ACK_FLOOD',
   },
   {
     label: 'TCP_FRAGMENT_FLOOD',
-    value: 'TCP_FRAGMENT_FLOOD'
+    value: 'TCP_FRAGMENT_FLOOD',
   },
   {
     label: 'TCP_FACK_FLOOD',
-    value: 'TCP_FACK_FLOOD'
-  }
+    value: 'TCP_FACK_FLOOD',
+  },
 ]
 
 function DosIcmp() {
   const { topoOptions } = useTopo()
-
+  const allProps = {
+    list,
+    del,
+    create,
+    update,
+    detail,
+    copy,
+    setFieldData,
+  }
   const {
     data,
     pagination,
@@ -73,16 +81,10 @@ function DosIcmp() {
     editData,
     copyData,
     afterClose,
-  } = useCommonFn(list, del, create, update, detail, copy, setFieldData)
+  } = useCommonFn(allProps)
 
   function setFieldData(data) {
-    const {
-      net_cfg,
-      stream_mode,
-      use_case_name,
-      stream_params,
-      id,
-    } = data
+    const { net_cfg, stream_mode, use_case_name, stream_params, id } = data
     form.setFieldsValue({
       id,
       net_cfg,
@@ -172,7 +174,7 @@ function DosIcmp() {
 
   return (
     <>
-      <h3>IGMP实例列表</h3>
+      <h3>IGMP实例</h3>
       <BtnBox
         addData={() => addData(form)}
         deleteData={() => deleteData()}

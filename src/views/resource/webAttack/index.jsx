@@ -4,50 +4,19 @@ import { Table, Input, Button, Select, Modal, Form } from 'antd'
 import { CopyOutlined, EditOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import {
-  attackList,
+  attackList as list,
   attackClass,
-  attackdel,
-  attackUpdate,
-  attackCreate,
-  attackDetail,
-  copy
+  attackdel as del,
+  attackUpdate as update,
+  attackCreate as create,
+  attackDetail as detail,
+  copy,
 } from '@/api/webAttack.js'
 import useCommonFn from '@/components/theFun'
 const { Option } = Select
 const { TextArea } = Input
 const ishandleAdd = true
 function WebAttack() {
-  const {
-    data,
-    pagination,
-    reflash,
-    addData,
-    deleteData,
-    rowSelection,
-    isModalOpen,
-    handleOk,
-    handleCancel,
-    isEdit,
-    editData,
-    copyData,
-    afterClose,
-  } = useCommonFn(
-    attackList,
-    attackdel,
-    attackCreate,
-    attackUpdate,
-    attackDetail,
-    copy,
-    setFieldData,
-    setAddForm,
-    ishandleAdd
-  )
-
-  function setAddForm(value) {
-    const TYPE = 'json'
-    const passParams = Object.assign({}, value, { file_type: TYPE })
-    return passParams
-  }
 
   function setFieldData(data) {
     const {
@@ -72,6 +41,41 @@ function WebAttack() {
       content,
     })
   }
+
+  const allProps = {
+    list,
+    del,
+    create,
+    update,
+    detail,
+    copy,
+    setFieldData,
+    setAddForm,
+    ishandleAdd,
+  }
+  const {
+    data,
+    pagination,
+    reflash,
+    addData,
+    deleteData,
+    rowSelection,
+    isModalOpen,
+    handleOk,
+    handleCancel,
+    isEdit,
+    editData,
+    copyData,
+    afterClose,
+  } = useCommonFn(allProps)
+
+  function setAddForm(value) {
+    const TYPE = 'json'
+    const passParams = Object.assign({}, value, { file_type: TYPE })
+    return passParams
+  }
+
+  
 
   const rowKey = (record) => record.id
 
@@ -137,7 +141,7 @@ function WebAttack() {
     },
     {
       title: '复制',
-      render: (text,record) => (
+      render: (text, record) => (
         <Button
           onClick={() => copyData(record.id)}
           icon={<CopyOutlined />}

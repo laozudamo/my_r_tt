@@ -1,5 +1,5 @@
 import BtnBox from '@/components/BtnBox'
-import { Table, Button, Select, Modal, Form, Radio, Input, Space } from 'antd'
+import { Table, Button, Select, Modal, Form, Input, InputNumber } from 'antd'
 import {
   CopyOutlined,
   EditOutlined,
@@ -12,6 +12,7 @@ import { list, create, update, del } from '@/api/fuzzy'
 import useCommonFn from '@/components/theFun'
 
 import { useTopo } from '@/components/topo.js'
+import { useFuzzy } from '@/utils/fuzzyList.js'
 
 // const { list, create, update, del, copy, detail } = DDosType('arp')
 const { Option } = Select
@@ -19,22 +20,34 @@ const { Option } = Select
 const theOptions = [
   {
     label: 'ARP_REQUEST_FLOOD',
-    value: 'ARP_REQUEST_FLOOD'
+    value: 'ARP_REQUEST_FLOOD',
   },
 
   {
     label: 'ARP_REPLY_FLOOD',
-    value: 'ARP_REPLY_FLOOD'
+    value: 'ARP_REPLY_FLOOD',
   },
   {
     label: 'ARP_GRAMR_FLOOD',
-    value: 'ARP_GRAMR_FLOOD'
-  }
+    value: 'ARP_GRAMR_FLOOD',
+  },
 ]
 
 function DosIcmp() {
   const { topoOptions } = useTopo()
+  const { fuzzyOptions } = useFuzzy()
+  // const ishandleAdd = true
 
+  const allProps = {
+    list,
+    del,
+    create,
+    update,
+    setFieldData,
+    setAddForm,
+    ishandleAdd:true,
+  }
+  
   const {
     data,
     pagination,
@@ -49,23 +62,36 @@ function DosIcmp() {
     editData,
     copyData,
     afterClose,
-  } = useCommonFn(list, del, create, update, setFieldData)
+  } = useCommonFn(allProps)
+
+  function setAddForm(value) {
+    const { use_case_name, total_time, network_config_id, dst_port, fuzz_id, index_end } =
+      value
+    const addForm = {
+      use_case_name,
+      total_time,
+      network_config_id,
+      config: {
+        dst_port,
+        fuzz_id,
+        index_end,
+      },
+    }
+    return addForm
+    // const formData = new FormData()
+    // formData.append('form',JSON.stringify(addForm))
+    // return formData
+  }
 
   function setFieldData(data) {
-    const {
-      net_cfg,
-      stream_mode,
-      use_case_name,
-      stream_params,
-      id,
-    } = data
-    form.setFieldsValue({
-      id,
-      net_cfg,
-      stream_mode,
-      use_case_name,
-      stream_params,
-    })
+    // const { net_cfg, stream_mode, use_case_name, stream_params, id } = data
+    // form.setFieldsValue({
+    //   id,
+    //   net_cfg,
+    //   stream_mode,
+    //   use_case_name,
+    //   stream_params,
+    // })
   }
 
   const rowKey = (record) => record.id
@@ -141,14 +167,9 @@ function DosIcmp() {
 
   const [form] = Form.useForm()
 
-  let attackList = []
-  const selectAttack = (v) => {
-    attackList = v
-  }
-
   return (
     <>
-      <h3>模糊攻击实例列表</h3>
+      <h3>模糊攻击实例</h3>
       <BtnBox
         addData={() => addData(form)}
         deleteData={() => deleteData()}
@@ -161,13 +182,13 @@ function DosIcmp() {
         columns={columns}
       />
       <Modal
-        width="800px"
-        title={isEdit ? '编辑ARP' : '新增ARP'}
+        width="500px"
+        title={isEdit ? '编辑模糊攻击' : '新增模糊攻击'}
         open={isModalOpen}
         onOk={() => handleOk(form)}
         onCancel={handleCancel}
         afterClose={afterClose}>
-        <Form name="form" form={form} initialValues={{}}>
+        <Form name="form" form={form} initialValues={{ }}>
           <Form.Item label="名称" name="use_case_name">
             <Input
               placeholder="请输入名称"
@@ -177,7 +198,7 @@ function DosIcmp() {
             />
           </Form.Item>
 
-          <Form.Item label="网络拓扑" name="net_cfg">
+          <Form.Item label="网络拓扑" name="network_config_id">
             <Select
               style={{
                 width: '300px',
@@ -191,93 +212,47 @@ function DosIcmp() {
               })}
             </Select>
           </Form.Item>
-          <Form.Item label="流模式" name="stream_mode">
-            <Radio.Group>
-              <Radio value="continuous">连续</Radio>
-              <Radio value="burst">突发模式</Radio>
-            </Radio.Group>
+          <Form.Item label="测试时间" name="total_time">
+            <InputNumber
+              min={1}
+              placeholder="请输入时间"
+              style={{
+                width: '300px',
+              }}
+            />
           </Form.Item>
-
-          <Form.List name="stream_params">
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map(({ key, name, ...restField }) => (
-                  <Space key={key} align="baseline">
-                    <Form.Item
-                      {...restField}
-                      label="类型"
-                      name={[name, 'attack_type']}
-                      rules={[
-                        {
-                          required: true,
-                          message: '请选择类型',
-                        },
-                      ]}>
-                      <Select
-                        className="the-input"
-                        style={{
-                          width: '250px',
-                        }}
-                        onChange={selectAttack}>
-                        {theOptions.map((item) => {
-                          return (
-                            <Option key={item.label} value={item.value}>
-                              {item.label}
-                            </Option>
-                          )
-                        })}
-                      </Select>
-                    </Form.Item>
-
-                    <Form.Item
-                      {...restField}
-                      label="占比"
-                      name={[name, 'rate']}
-                      initialValue={10}
-                      rules={[
-                        {
-                          required: true,
-                          message: '请填写占比',
-                        },
-                      ]}>
-                      <Input
-                        style={{
-                          width: '80px',
-                        }}
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      label="时间"
-                      name={[name, 'attack_time']}
-                      initialValue={10}
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Missing last name',
-                        },
-                      ]}>
-                      <Input
-                        style={{
-                          width: '80px',
-                        }}
-                      />
-                    </Form.Item>
-                    <MinusCircleOutlined onClick={() => remove(name)} />
-                  </Space>
-                ))}
-                <Form.Item>
-                  <Button
-                    type="dashed"
-                    onClick={() => add()}
-                    block
-                    icon={<PlusOutlined />}>
-                    添加攻击
-                  </Button>
-                </Form.Item>
-              </>
-            )}
-          </Form.List>
+          <Form.Item label="模糊模版" name="fuzz_id">
+            <Select
+              style={{
+                width: '300px',
+              }}>
+              {fuzzyOptions.map((item) => {
+                return (
+                  <Option key={item.label} value={item.value}>
+                    {item.label}
+                  </Option>
+                )
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item label="目标端口" name="dst_port">
+            <InputNumber
+              min={0}
+              placeholder="请输入目标端口"
+              style={{
+                width: '300px',
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="发包数量" name="index_end">
+            <InputNumber
+              min={1}
+              placeholder="请输入发包数量"
+              style={{
+                width: '300px',
+              }}
+            />
+          </Form.Item>
         </Form>
       </Modal>
     </>

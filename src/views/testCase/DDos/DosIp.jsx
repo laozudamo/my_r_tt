@@ -25,7 +25,15 @@ const theOptions = [
 
 function DosIcmp() {
   const { topoOptions } = useTopo()
-
+  const allProps = {
+    list,
+    del,
+    create,
+    update,
+    detail,
+    copy,
+    setFieldData,
+  }
   const {
     data,
     pagination,
@@ -40,7 +48,7 @@ function DosIcmp() {
     editData,
     copyData,
     afterClose,
-  } = useCommonFn(list, del, create, update, detail, copy, setFieldData)
+  } = useCommonFn(allProps)
 
   function setFieldData(data) {
     const {
@@ -139,7 +147,7 @@ function DosIcmp() {
 
   return (
     <>
-      <h3>IP实例列表</h3>
+      <h3>IP实例</h3>
       <BtnBox
         addData={() => addData(form)}
         deleteData={() => deleteData()}

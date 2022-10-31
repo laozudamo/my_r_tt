@@ -5,7 +5,7 @@ import {
   EditOutlined,
   MinusCircleOutlined,
   PlusOutlined,
-  CaretRightFilled
+  CaretRightFilled,
 } from '@ant-design/icons'
 import { DDosType } from '@/api/DDos'
 import useCommonFn from '@/components/theFun'
@@ -17,38 +17,46 @@ const { Option } = Select
 const theOptions = [
   {
     label: 'ICMP_PING_REQUEST_FLOOD',
-    value: 'ICMP_PING_REQUEST_FLOOD'
+    value: 'ICMP_PING_REQUEST_FLOOD',
   },
 
   {
     label: 'ICMP_FRAGMENT_FLOOD',
-    value: 'ICMP_FRAGMENT_FLOOD'
+    value: 'ICMP_FRAGMENT_FLOOD',
   },
   {
     label: 'ICMP_SMURF_FLOOD',
-    value: 'ICMP_SMURF_FLOOD'
+    value: 'ICMP_SMURF_FLOOD',
   },
   {
     label: 'ICMP_ADDRESS_MASK_REQUEST_FLOOD',
-    value: 'ICMP_ADDRESS_MASK_REQUEST_FLOOD'
+    value: 'ICMP_ADDRESS_MASK_REQUEST_FLOOD',
   },
   {
     label: 'ICMP_ADDRESS_MASK_REPLY_FLOOD',
-    value: 'ICMP_ADDRESS_MASK_REPLY_FLOOD'
+    value: 'ICMP_ADDRESS_MASK_REPLY_FLOOD',
   },
   {
     label: 'ICMP_TIMESTAMP_REQUEST_FLOOD',
-    value: 'ICMP_TIMESTAMP_REQUEST_FLOOD'
+    value: 'ICMP_TIMESTAMP_REQUEST_FLOOD',
   },
   {
     label: 'ICMP_TIMESTAMP_REPLY_FLOOD',
-    value: 'ICMP_TIMESTAMP_REPLY_FLOOD'
-  }
+    value: 'ICMP_TIMESTAMP_REPLY_FLOOD',
+  },
 ]
 
 function DosIcmp() {
   const { topoOptions } = useTopo()
-
+  const allProps = {
+    list,
+    del,
+    create,
+    update,
+    detail,
+    copy,
+    setFieldData,
+  }
   const {
     data,
     pagination,
@@ -63,16 +71,10 @@ function DosIcmp() {
     editData,
     copyData,
     afterClose,
-  } = useCommonFn(list, del, create, update, detail, copy, setFieldData)
+  } = useCommonFn(allProps)
 
   function setFieldData(data) {
-    const {
-      net_cfg,
-      stream_mode,
-      use_case_name,
-      stream_params,
-      id,
-    } = data
+    const { net_cfg, stream_mode, use_case_name, stream_params, id } = data
     form.setFieldsValue({
       id,
       net_cfg,
@@ -154,7 +156,7 @@ function DosIcmp() {
 
   return (
     <>
-      <h3>ICMP实例列表</h3>
+      <h3>ICMP实例</h3>
       <BtnBox
         addData={() => addData(form)}
         deleteData={() => deleteData()}

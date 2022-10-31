@@ -5,7 +5,7 @@ import {
   EditOutlined,
   MinusCircleOutlined,
   PlusOutlined,
-  CaretRightFilled
+  CaretRightFilled,
 } from '@ant-design/icons'
 import { DDosType } from '@/api/DDos'
 
@@ -19,26 +19,34 @@ const { Option } = Select
 const theOptions = [
   {
     label: 'UDP_FLOOD',
-    value: 'UDP_FLOOD'
+    value: 'UDP_FLOOD',
   },
 
   {
     label: 'UDP_TEAR_DROP_FLOOD',
-    value: 'UDP_TEAR_DROP_FLOOD'
+    value: 'UDP_TEAR_DROP_FLOOD',
   },
   {
     label: 'UDP_BROADCAST_FLOOD',
-    value: 'UDP_BROADCAST_FLOOD'
+    value: 'UDP_BROADCAST_FLOOD',
   },
   {
     label: 'UDP_MULTICAST_FLOOD',
-    value: 'UDP_MULTICAST_FLOOD'
-  }
+    value: 'UDP_MULTICAST_FLOOD',
+  },
 ]
 
 function DosIcmp() {
   const { topoOptions } = useTopo()
-
+  const allProps = {
+    list,
+    del,
+    create,
+    update,
+    detail,
+    copy,
+    setFieldData,
+  }
   const {
     data,
     pagination,
@@ -53,16 +61,10 @@ function DosIcmp() {
     editData,
     copyData,
     afterClose,
-  } = useCommonFn(list, del, create, update, detail, copy, setFieldData)
+  } = useCommonFn(allProps)
 
   function setFieldData(data) {
-    const {
-      net_cfg,
-      stream_mode,
-      use_case_name,
-      stream_params,
-      id,
-    } = data
+    const { net_cfg, stream_mode, use_case_name, stream_params, id } = data
     form.setFieldsValue({
       id,
       net_cfg,
@@ -144,7 +146,7 @@ function DosIcmp() {
 
   return (
     <>
-      <h3>UDP实例列表</h3>
+      <h3>UDP实例</h3>
       <BtnBox
         addData={() => addData(form)}
         deleteData={() => deleteData()}
