@@ -10,11 +10,12 @@ import {
   attackUpdate,
   attackCreate,
   attackDetail,
+  copy
 } from '@/api/webAttack.js'
 import useCommonFn from '@/components/theFun'
 const { Option } = Select
 const { TextArea } = Input
-
+const ishandleAdd = true
 function WebAttack() {
   const {
     data,
@@ -36,25 +37,39 @@ function WebAttack() {
     attackCreate,
     attackUpdate,
     attackDetail,
-    setFieldData
+    copy,
+    setFieldData,
+    setAddForm,
+    ishandleAdd
   )
 
+  function setAddForm(value) {
+    const TYPE = 'json'
+    const passParams = Object.assign({}, value, { file_type: TYPE })
+    return passParams
+  }
+
   function setFieldData(data) {
-    console.log('详细数据',data);
     const {
       attack_name,
       intrusion_class_id,
       content,
+      file_name,
+      file_type,
+      id,
       details: { hit_str1, hit_str2, hit_str3, payload },
     } = data
     form.setFieldsValue({
+      file_name,
       attack_name,
+      file_type,
+      id,
       intrusion_class_id,
       hit_str1,
       hit_str2,
       hit_str3,
       payload,
-      content
+      content,
     })
   }
 
@@ -122,9 +137,9 @@ function WebAttack() {
     },
     {
       title: '复制',
-      render: () => (
+      render: (text,record) => (
         <Button
-          onClick={() => copyData()}
+          onClick={() => copyData(record.id)}
           icon={<CopyOutlined />}
           type="primary"
           ghost>
@@ -147,6 +162,12 @@ function WebAttack() {
   ]
 
   const [form] = Form.useForm()
+
+  // function handlAddForm(value) {
+  //   const TYPE = 'json'
+  //   const passParams = Object.assign({}, value, { file_type: TYPE })
+  //   return passParams
+  // }
 
   return (
     <>
@@ -215,7 +236,7 @@ function WebAttack() {
             <Input placeholder="请输入名称" />
           </Form.Item>
           <Form.Item label="描述" name="content">
-            <Input  placeholder="请输入描述" />
+            <Input placeholder="请输入描述" />
           </Form.Item>
           <Form.Item label="命中字符1" name="hit_str1">
             <Input placeholder="请输入命中字符1" />
@@ -229,7 +250,6 @@ function WebAttack() {
           <Form.Item label="负载" name="payload">
             <TextArea rows={4} placeholder="请输入负载" />
           </Form.Item>
-     
         </Form>
       </Modal>
     </>

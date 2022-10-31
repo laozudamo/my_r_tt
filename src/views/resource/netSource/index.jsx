@@ -127,7 +127,7 @@ export default function NetSource() {
 
   const deleteData = async (keys) => {
     const data = {
-      pk: keys,
+      ids: keys,
     }
     try {
       const res = await topuDel(data)
@@ -268,7 +268,7 @@ export default function NetSource() {
       if (isEdit) {
         if (id === -1) return
         let params = {
-          pk: id,
+          id: id,
           network_name,
           client_config,
           server_config,

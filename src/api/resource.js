@@ -30,7 +30,7 @@ export function putTopu(data) {
 export function topuDel(data) {
   return request({
     url: 'configuration/delete',
-    method: 'put',
+    method: 'delete',
     data
   })
 }

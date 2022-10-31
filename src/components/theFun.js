@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import tip from './Tips.js'
 
 
-function useCommonFn (list, del, create, update, detail, setFieldData) {
+function useCommonFn (list, del, create, update, detail, copy, setFieldData, setAddForm, ishandleAdd = false,) {
   const [data, setData] = useState([])
 
   const [current, setCurrent] = useState(1)
@@ -20,6 +20,14 @@ function useCommonFn (list, del, create, update, detail, setFieldData) {
 
   const [theId, setTheId] = useState('')
 
+  function getAllList () {
+    let params = {
+      page_size: page_size,
+      page: current,
+    }
+    getList(params)
+  }
+
   const showModal = () => {
     setIsModalOpen(true)
   }
@@ -32,20 +40,18 @@ function useCommonFn (list, del, create, update, detail, setFieldData) {
   async function addNewData (form) {
     try {
       const value = await form.validateFields()
-
-      // TODO
-      const TYPE = 'json'
-      const passParams = Object.assign({}, value, { file_type: TYPE })
-      const res = await create(passParams)
-      // TODO
+      let addParams = null
+      // 判定是否需要额外处理新增表单
+      if (ishandleAdd) {
+        addParams = setAddForm(value)
+      } else {
+        addParams = value
+      }
+      const res = await create(addParams)
       tip(res)
       setIsModalOpen(false)
       form.resetFields()
-      let params = {
-        page_size: page_size,
-        page: current,
-      }
-      getList(params)
+      getAllList()
     } catch (error) {
       console.log(error);
     }
@@ -54,47 +60,30 @@ function useCommonFn (list, del, create, update, detail, setFieldData) {
   async function updateData (form) {
     try {
       setIsEdit(true)
-      const value = await form.validateFields()
-      //TODO
-      const TYPE = 'json'
-      const passParams = Object.assign({}, value, { file_type: TYPE, file_name: fileName, id: theId })
-      const res = await update(passParams)
-      // TODO 非通用问题
-
-      let params = {
-        page_size: page_size,
-        page: current,
-      }
-
+      await form.validateFields()
+      const value = form.getFieldValue()
+      const res = await update(value)
       tip(res)
       setIsModalOpen(false)
       form.resetFields()
-      getList(params)
+      getAllList()
     } catch (error) {
       console.log(error);
     }
   }
 
-
   const editData = async (form, record) => {
 
     try {
-      setIsEdit(true)
-      setIsModalOpen(true)
-      let parmas = {
+      let params = {
         id: record.id
       }
-      const { data } = await detail(parmas)
+      const { data } = await detail(params)
 
-      // 报告部分的key
-      const KEY = 'file_name'
-      if (KEY in data) {
-        setFileName(data.file_name)
-      }
-
-      setTheId(data.id)
-
+      setIsEdit(true)
+      setIsModalOpen(true)
       setFieldData(data)
+
     } catch (error) {
       console.log(error)
     }
@@ -125,13 +114,10 @@ function useCommonFn (list, del, create, update, detail, setFieldData) {
   }
 
   const onChange = (page, pageSize) => {
-
-    // TODO 非通用问题
     let params = {
       page_size: pageSize,
       page: page,
     }
-    // TODO 非通用问题
     getList(params)
 
   }
@@ -157,7 +143,6 @@ function useCommonFn (list, del, create, update, detail, setFieldData) {
       const { data, count, page_size, page } = await list(params)
       setData(data)
       setCurrent(page)
-      console.log(count);
       setTotal(count)
       setPageSize(page_size)
 
@@ -166,16 +151,22 @@ function useCommonFn (list, del, create, update, detail, setFieldData) {
     }
   }
 
-  const copyData = () => {
+  const copyData = async (id) => {
+    try {
+      let params = {
+        id: id,
+      }
+      const res = await copy(params)
+      tip(res)
+      getAllList()
+    } catch (error) {
+      console.log(error)
+    }
     console.log("copyData")
   }
 
   const reflash = () => {
-    let params = {
-      page_size: page_size,
-      page: current,
-    }
-    getList(params)
+    getAllList()
   }
 
   const addData = (form) => {
@@ -192,16 +183,10 @@ function useCommonFn (list, del, create, update, detail, setFieldData) {
       let parmas = {
         ids: selectedRowKeys
       }
-      console.log(parmas);
       const res = await del(parmas)
       tip(res)
       setkeys([])
-
-      let p = {
-        page_size: page_size,
-        page: current,
-      }
-      getList(p)
+      getAllList()
 
     } catch (error) {
       console.log(error);
@@ -209,12 +194,7 @@ function useCommonFn (list, del, create, update, detail, setFieldData) {
   }
 
   useEffect(() => {
-    let params = {
-      page_size: page_size,
-      page: current,
-    }
-
-    getList(params)
+    getAllList()
   }, [])
 
   return {

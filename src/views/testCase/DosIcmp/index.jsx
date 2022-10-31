@@ -25,7 +25,7 @@ function DosIcmp() {
     editData,
     copyData,
     afterClose,
-  } = useCommonFn(list, del, create, update, detail, setFieldData, copy)
+  } = useCommonFn(list, del, create, update, detail, copy, setFieldData)
 
   function setFieldData(data) {
     console.log('详细数据', data)
@@ -111,9 +111,9 @@ function DosIcmp() {
 
     {
       title: '复制',
-      render: () => (
+      render: (text, record) => (
         <Button
-          onClick={() => copyData()}
+          onClick={() => copyData(record.id)}
           icon={<CopyOutlined />}
           type="primary"
           ghost>
@@ -176,13 +176,13 @@ function DosIcmp() {
                 width: 200,
               }}
               onChange={handleChange}>
-              {/* {optionList.map((item) => {
+              {optionList.map((item) => {
                 return (
                   <Option key={item.id} value={item.id}>
                     {item.classes_attack_name}
                   </Option>
                 )
-              })} */}
+              })}
               <Option key={1} value={2}></Option>
             </Select>
           </Form.Item>

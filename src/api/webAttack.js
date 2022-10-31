@@ -22,7 +22,7 @@ export function attackClass (params) {
 export function attackdel (data) {
   return request({
     url: '/security/attack/intrusion/delete',
-    method: 'put',
+    method: 'delete',
     data
   })
 }
@@ -51,5 +51,13 @@ export function attackDetail (params) {
     url: '/security/attack/intrusion',
     method: 'get',
     params
+  })
+}
+
+export function copy(data){
+  return request({
+      url:`/security/attack/intrusion/copy`,
+      method:'post',
+      data
   })
 }

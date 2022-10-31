@@ -1,16 +1,60 @@
 import BtnBox from '@/components/BtnBox'
-import { Table, Input, Button, Select, Modal, Form } from 'antd'
-import { CopyOutlined, EditOutlined } from '@ant-design/icons'
+import { Table, Button, Select, Modal, Form, Radio, Input, Space } from 'antd'
+import {
+  CopyOutlined,
+  EditOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+} from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { DDosType } from '@/api/DDos'
 
 import useCommonFn from '@/components/theFun'
 
+import { useTopo } from '@/components/topo.js'
+
 const { list, create, update, del, copy, detail } = DDosType('igmp')
 const { Option } = Select
-const { TextArea } = Input
+
+const theOptions = [
+  {
+    label: 'IGMPV1_REQUEST_FLOOD',
+    value: 'IGMPV1_REQUEST_FLOOD',
+  },
+
+  {
+    label: 'IGMPV1_REPLY_FLOOD',
+    value: 'IGMPV1_REPLY_FLOOD',
+  },
+  {
+    label: 'IGMPV1_GRAMR_FLOOD',
+    value: 'IGMPV1_GRAMR_FLOOD',
+  },
+  {
+    label: 'IGMPV2_REQUEST_FLOOD',
+    value: 'IGMPV2_REQUEST_FLOOD',
+  },
+  {
+    label: 'IGMPV2_GRAMR_FLOOD',
+    value: 'IGMPV2_GRAMR_FLOOD',
+  },
+  {
+    label: 'IGMPV2_REPLY_FLOOD',
+    value: 'IGMPV2_REPLY_FLOOD',
+  },
+  {
+    label: 'IGMPV2_QUERY_FLOOD',
+    value: 'IGMPV2_QUERY_FLOOD',
+  },
+  {
+    label: 'IGMPV3_REQUEST_FLOOD',
+    value: 'IGMPV3_REQUEST_FLOOD',
+  },
+]
 
 function DosIcmp() {
+  const { topoOptions } = useTopo()
+
   const {
     data,
     pagination,
@@ -25,44 +69,13 @@ function DosIcmp() {
     editData,
     copyData,
     afterClose,
-  } = useCommonFn(list, del, create, update, detail, setFieldData, copy)
+  } = useCommonFn(list, del, create, update, detail, copy, setFieldData)
 
   function setFieldData(data) {
     console.log('详细数据', data)
-
-    // form.setFieldsValue({})
   }
 
   const rowKey = (record) => record.id
-
-  const [optionList, setOptList] = useState([])
-
-  function getOptionList(count) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let p = {
-          page: 1,
-          page_size: count,
-        }
-        const { data } = await attackClass(p)
-        resolve(data)
-      } catch (error) {
-        reject(error)
-      }
-    })
-  }
-
-  useEffect(() => {
-    // attackClass().then(async (res) => {
-    //   const { count } = res
-    //   const dataList = await getOptionList(count)
-    //   setOptList(dataList)
-    // })
-  }, [])
-
-  const handleChange = (v) => {
-    console.log(v)
-  }
 
   const columns = [
     {
@@ -103,43 +116,42 @@ function DosIcmp() {
           onClick={() => editData(form, record)}
           icon={<EditOutlined />}
           ghost
-          danger>
-          编辑
-        </Button>
+          danger></Button>
       ),
     },
 
     {
       title: '复制',
-      render: () => (
+      render: (text, record) => (
         <Button
-          onClick={() => copyData()}
+          onClick={() => copyData(record.id)}
           icon={<CopyOutlined />}
           type="primary"
-          ghost>
-          复制
-        </Button>
+          ghost></Button>
       ),
     },
-    {
-      title: '详情',
-      render: () => (
-        <Button icon={<CopyOutlined />} type="primary" ghost>
-          详情
-        </Button>
-      ),
-    },
+    // {
+    //   title: '详情',
+    //   render: () => (
+    //     <Button icon={<CopyOutlined />} type="primary" ghost>
+    //       详情
+    //     </Button>
+    //   ),
+    // },
     {
       title: '运行',
       render: () => (
-        <Button icon={<CopyOutlined />} type="primary" ghost>
-          运行
-        </Button>
+        <Button icon={<CopyOutlined />} type="primary" ghost></Button>
       ),
     },
   ]
 
   const [form] = Form.useForm()
+
+  let attackList = []
+  const selectAttack = (v) => {
+    attackList = v
+  }
 
   return (
     <>
@@ -156,45 +168,123 @@ function DosIcmp() {
         columns={columns}
       />
       <Modal
+        width="800px"
         title={isEdit ? '编辑任务' : '新增任务'}
         open={isModalOpen}
         onOk={() => handleOk(form)}
         onCancel={handleCancel}
         afterClose={afterClose}>
         <Form name="form_task" form={form} initialValues={{}}>
-          <Form.Item label="名称" name="name">
-            <Input placeholder="请输入名称" />
+          <Form.Item label="名称" name="use_case_name">
+            <Input
+              placeholder="请输入名称"
+              style={{
+                width: '300px',
+              }}
+            />
           </Form.Item>
 
-          <Form.Item label="运行时间" name="run_time">
-            <Input placeholder="请选择运行时间" />
-          </Form.Item>
-          <Form.Item label="实例类型" name="type">
+          <Form.Item label="网络拓扑" name="net_cfg">
             <Select
-              className="the-input"
               style={{
-                width: 200,
-              }}
-              onChange={handleChange}>
-              {/* {optionList.map((item) => {
+                width: '300px',
+              }}>
+              {topoOptions.map((item) => {
                 return (
-                  <Option key={item.id} value={item.id}>
-                    {item.classes_attack_name}
+                  <Option key={item.label} value={item.value}>
+                    {item.label}
                   </Option>
                 )
-              })} */}
-              <Option key={1} value={2}></Option>
+              })}
             </Select>
           </Form.Item>
-
-          <Form.Item label="实例" name="hit_str2">
-            <Input placeholder="请输入命中字符2" />
-            <button>确认</button>
+          <Form.Item label="流模式" name="stream_mode">
+            <Radio.Group>
+              <Radio value="continuous">连续</Radio>
+              <Radio value="burst">突发模式</Radio>
+            </Radio.Group>
           </Form.Item>
 
-          <Form.Item label="实例列表" name="use_case">
-            <TextArea rows={4} placeholder="请输入负载" />
-          </Form.Item>
+          <Form.List name="strame_params">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Space key={key} align="baseline">
+                    <Form.Item
+                      {...restField}
+                      label="类型"
+                      name={[name, 'attack_type']}
+                      rules={[
+                        {
+                          required: true,
+                          message: '请选择类型',
+                        },
+                      ]}>
+                      <Select
+                        className="the-input"
+                        style={{
+                          width: '250px',
+                        }}
+                        onChange={selectAttack}>
+                        {theOptions.map((item) => {
+                          return (
+                            <Option key={item.label} value={item.value}>
+                              {item.label}
+                            </Option>
+                          )
+                        })}
+                      </Select>
+                    </Form.Item>
+
+                    <Form.Item
+                      {...restField}
+                      label="占比"
+                      name={[name, 'rate']}
+                      initialValue={10}
+                      rules={[
+                        {
+                          required: true,
+                          message: '请填写占比',
+                        },
+                      ]}>
+                      <Input
+                        style={{
+                          width: '80px',
+                        }}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      {...restField}
+                      label="时间"
+                      name={[name, 'time']}
+                      initialValue={10}
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Missing last name',
+                        },
+                      ]}>
+                      <Input
+                        style={{
+                          width: '80px',
+                        }}
+                      />
+                    </Form.Item>
+                    <MinusCircleOutlined onClick={() => remove(name)} />
+                  </Space>
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    block
+                    icon={<PlusOutlined />}>
+                    添加攻击
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
         </Form>
       </Modal>
     </>

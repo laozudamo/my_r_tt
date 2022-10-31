@@ -1,6 +1,6 @@
-import request from '@/utils/request.js'
+import request from '@/utils/request'
 
-// DDos
+// 待修改
 function DDosType (type) {
   function list (params) {
     return request({
@@ -10,25 +10,23 @@ function DDosType (type) {
     })
   }
 
-  // 新增
   function create (data) {
     return request({
-      url: `cases/attack/dos/list_create`,
+      url: `cases/attack/dos/list_create?protocol_server_type=${type}`,
       method: 'post',
       data
     })
   }
 
-  // 修改
+
   function update (data) {
     return request({
-      url: `cases/attack/dos/list_update`,
-      method: 'patch',
+      url: `cases/attack/dos/list_update?protocol_server_type=${type}`,
+      method: 'put',
       data
     })
   }
 
-  // 删除
   function del (data) {
     return request({
       url: 'cases/attack/dos/list_delete',
@@ -37,17 +35,17 @@ function DDosType (type) {
     })
   }
 
-  function copy (params) {
+  function copy (data) {
     return request({
       url: 'cases/attack/dos/cpy',
       method: 'post',
-      params
+      data
     })
   }
 
   function detail (params) {
     return request({
-      url: `cases/attack/dos/detail`,
+      url: 'cases/attack/dos/detail',
       method: 'get',
       params
     })
