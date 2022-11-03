@@ -1,6 +1,4 @@
 import request from '@/utils/request.js'
-import postForm from '@/utils/postForm.js'
-
 
 export function list (params) {
   return request({

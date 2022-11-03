@@ -194,7 +194,7 @@ function UserAdmin () {
     })
   }
 
-  const model = <Modal onOk={submitFrom} className='the-Modal' size="small" cancelText={"取消"} okText={"确认"} afterClose={afterClose} title={isEdit ? '修改' : '新增'} visible={isModalVisible} onCancel={handleCancel} destroyOnClose={true} >
+  const model = <Modal onOk={submitFrom} className='the-Modal' size="small" cancelText={"取消"} okText={"确认"} afterClose={afterClose} title={isEdit ? '修改' : '新增'} open={isModalVisible} onCancel={handleCancel} destroyOnClose={true} >
     <Form
       form={form}
       layout="inline"

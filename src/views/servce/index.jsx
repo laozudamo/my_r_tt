@@ -1,94 +1,164 @@
 import React from 'react'
-import { Table, Button } from 'antd'
+import { Table, Button, Select } from 'antd'
+import {
+  portList,
+  portUnbind,
+  cpuList,
+  portBind,
+  cpuBind,
+} from '@/api/servce/servce.js'
+import { useEffect, useState } from 'react'
+import tip from '@/components/Tips'
 
-const columns = [
-  {
-    title: '端口',
-    dataIndex: 'port',
-    key: 'port',
-  },
-  {
-    title: '端口状态',
-    dataIndex: 'portStatus',
-    key: 'portStatus',
-  },
-  {
-    title: '速率',
-    dataIndex: 'speed',
-    key: 'speed',
-  },
-  {
-    title: '占用',
-    dataIndex: 'owner',
-    key: 'owner',
-  },
-  {
-    title: '绑定',
-    key: 'bind',
-    render: () =>  <Button>占用</Button>
-  },
-  {
-    title: '解除绑定',
-    key: 'unbind',
-    render: () => <Button>解绑端口</Button>
-  }
-]
-
-const dataSource = [
-  {
-    key: 1,
-    port: 'Port1',
-    portStatus: '在线',
-    speed: 1000,
-    owner: 'admin'
-  },
-  {
-    key: 2,
-    port: 'Port2',
-    portStatus: '在线',
-    speed: 1000,
-    owner: 'admin'
-  },
-  {
-    key: 3,
-    port: 'Port3',
-    portStatus: '在线',
-    speed: 1000,
-    owner: 'admin'
-  },
-  {
-    key: 4,
-    port: 'Port4',
-    portStatus: '在线',
-    speed: 1000,
-    owner: 'admin'
-  },
-]
 function Servce() {
+  const [dataSource, setDataSource] = useState([])
+
+  const [options, setOptions] = useState([])
+  const [curCpu, setCurCpu] = useState([])
+  const [curPort, setCurPort] = useState('')
+
+  async function getList() {
+    try {
+      const { data } = await portList()
+      setDataSource(data)
+      let tmpOptions = data.map((item) => {
+        return item?.cpu_cores?.cpu_available
+      })
+      setOptions(tmpOptions)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getList()
+  }, [])
+
+  const onBlur = async () => {
+    try {
+      const fromData = new FormData()
+      fromData.append('used_cpu', JSON.stringify(curCpu))
+      fromData.append('port', Number(curPort))
+      const res = await cpuBind(fromData)
+      tip(res)
+      getList()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const changeSelect = (port, cpu) => {
+    setCurCpu(cpu)
+    setCurPort(port)
+  }
+
+  const onSearch = (v) => {
+
+  }
+
+  const bindPort =async (port) => {
+    try {
+      const fromData = new FormData()
+      fromData.append('port', Number(port))
+      const res = await portBind(fromData)
+      tip(res)
+      getList()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const unbindPort = async (port) => {
+    try {
+      let params = {
+        port: port,
+      }
+      const res = await portUnbind(params)
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
-    <div className="main-content">
-      <h3>服务</h3>
-      <Table dataSource={dataSource} columns={columns} pagination={false}/>
+    <div style={{ margin: '20px' }}>
+      {dataSource.map((item, index) => {
+        return (
+          <div key={item.cpu_node}>
+            <h3>服务</h3>
+            <Table
+              dataSource={item.ports_info}
+              columns={[
+                {
+                  title: '端口',
+                  dataIndex: 'port',
+                  key: 'port',
+                },
+                {
+                  title: 'PCI地址',
+                  dataIndex: 'pci_addr',
+                  key: 'pci_addr',
+                },
+                {
+                  title: '运行状态',
+                  dataIndex: 'run_status',
+                  key: 'run_status',
+                  render: (row, text) => {
+                    return <div>{row}</div>
+                  },
+                },
+                {
+                  title: '占用',
+                  dataIndex: 'bind_user',
+                  key: 'bind_user',
+                },
+                {
+                  title: '操作',
+                  dataIndex: 'bind',
+                  key: 'bind',
+                  render: (text, record) => {
+                    return record.bind_user !== '-' ? (
+                      <Button onClick={() => unbindPort(record.port)}>
+                        解绑
+                      </Button>
+                    ) : (
+                      <Button onClick={() => bindPort(record.port)}>
+                        绑定
+                      </Button>
+                    )
+                  },
+                },
+                {
+                  title: 'CPU节点',
+                  dataIndex: 'bind',
+                  key: 'bind',
+                  render: (text, record) => {
+                    return (
+                      <Select
+                        disabled={record.bind_user === '-' ? true : false}
+                        onBlur={onBlur}
+                        mode="multiple"
+                        onSearch={(v) => onSearch(v)}
+                        style={{
+                          width: '100%',
+                          maxWidth: '400px',
+                        }}
+                        placeholder="Please select"
+                        defaultValue={record.used_cpu}
+                        onChange={(v) => changeSelect(record.port, v)}
+                        options={options[index]}
+                      />
+                    )
+                  },
+                },
+              ]}
+              pagination={false}
+            />
+          </div>
+        )
+      })}
     </div>
   )
 }
-// class Servce extends React.Component {
-//   constructor(props) {
-//     super(props)
-//     this.state = { date: new Date(), num: 1 }
-//   }
-//   componentDidMount() {
-//     console.log("挂载");
-//   }
-
-//   componentWillUnmount() {
-//     console.log("离开")
-//   }
-
-//   render() {
-
-//     )
-//   }
-// }
 
 export default Servce

@@ -11,7 +11,7 @@ const service = axios.create({
   baseURL: 'http://192.168.0.231:9001', // url = base url + request url
   timeout: 3000, // request timeout
   headers: {
-    'Content-Type': 'application/json;charset=UTF-8'
+    'Content-Type': 'application/json;charset=UTF-8;application/x-www-form-urlencoded'
   }
 })
 
@@ -25,10 +25,8 @@ service.interceptors.request.use(config => {
   return config;
 },
   error => {
-
     // Do something with request error
     return Promise.reject(error);
-    console.log('请求', error)
   });
 
 
