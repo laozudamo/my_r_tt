@@ -16,8 +16,6 @@
 // }
 
 // export default Report
-import { Image } from 'antd'
-import img from './test.png'
 
 function Report () {
   return (
