@@ -61,6 +61,7 @@ function App() {
               <Route path="arp" index element={<DosArp />} />
               <Route path="fuzzy" index element={<Fuzzy />} />
             </Route>
+            
             <Route path="report" element={<Report />} />
 
             <Route path="system" element={<System />}>

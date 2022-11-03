@@ -34,7 +34,7 @@ function Servce() {
     getList()
   }, [])
 
-  const onBlur = async () => {
+  const confirmBindCpu = async () => {
     try {
       const fromData = new FormData()
       fromData.append('used_cpu', JSON.stringify(curCpu))
@@ -52,11 +52,7 @@ function Servce() {
     setCurPort(port)
   }
 
-  const onSearch = (v) => {
-
-  }
-
-  const bindPort =async (port) => {
+  const bindPort = async (port) => {
     try {
       const fromData = new FormData()
       fromData.append('port', Number(port))
@@ -74,32 +70,42 @@ function Servce() {
         port: port,
       }
       const res = await portUnbind(params)
-      console.log(res)
+      tip(res)
+      getList()
     } catch (error) {
       console.log(error)
     }
   }
 
+  const rowKey = (record) => record.port
+
   return (
     <div style={{ margin: '20px' }}>
       {dataSource.map((item, index) => {
         return (
-          <div key={item.cpu_node}>
-            <h3>服务</h3>
+          <div key={index}>
+            <h3>
+              <span>插槽名称:{item.slot_name}</span>
+              <span>CPU核:{item?.cpu_cores?.cpu_cores}</span>
+            </h3>
             <Table
+              rowKey={rowKey}
               dataSource={item.ports_info}
               columns={[
                 {
                   title: '端口',
                   dataIndex: 'port',
                   key: 'port',
+                  width: 60,
                 },
                 {
+                  width: 300,
                   title: 'PCI地址',
                   dataIndex: 'pci_addr',
                   key: 'pci_addr',
                 },
                 {
+                  width: 100,
                   title: '运行状态',
                   dataIndex: 'run_status',
                   key: 'run_status',
@@ -108,13 +114,14 @@ function Servce() {
                   },
                 },
                 {
+                  width: 300,
                   title: '占用',
                   dataIndex: 'bind_user',
                   key: 'bind_user',
                 },
                 {
                   title: '操作',
-                  dataIndex: 'bind',
+                  width: 150,
                   key: 'bind',
                   render: (text, record) => {
                     return record.bind_user !== '-' ? (
@@ -134,20 +141,27 @@ function Servce() {
                   key: 'bind',
                   render: (text, record) => {
                     return (
-                      <Select
-                        disabled={record.bind_user === '-' ? true : false}
-                        onBlur={onBlur}
-                        mode="multiple"
-                        onSearch={(v) => onSearch(v)}
-                        style={{
-                          width: '100%',
-                          maxWidth: '400px',
-                        }}
-                        placeholder="Please select"
-                        defaultValue={record.used_cpu}
-                        onChange={(v) => changeSelect(record.port, v)}
-                        options={options[index]}
-                      />
+                      <>
+                        <Select
+                          allowClear
+                          disabled={record.bind_user === '-' ? true : false}
+                          mode="multiple"
+                          style={{
+                            width: '650px',
+                            // maxWidth: '400px',
+                          }}
+                          // value={record.used_cpu}
+                          placeholder="Please select"
+                          defaultValue={record.used_cpu}
+                          onChange={(v) => changeSelect(record.port, v)}
+                          options={options[index]}
+                        />
+                        <Button
+                          disabled={record.bind_user === '-' ? true : false}
+                          onClick={confirmBindCpu}>
+                          确认
+                        </Button>
+                      </>
                     )
                   },
                 },
