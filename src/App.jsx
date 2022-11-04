@@ -1,6 +1,9 @@
 import './App.scss'
 import 'antd/dist/antd.css'
 
+import { useStore } from '@/store'
+import { observer } from 'mobx-react-lite'
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import Layout from '@/layout'
@@ -41,6 +44,8 @@ import Notfound from '@/views/error/404'
 import Forbbiden from '@/views/error/403'
 
 function App() {
+  const { user } = useStore()
+  console.log(user.name);
   return (
     <div className="App">
       <BrowserRouter>
@@ -86,4 +91,4 @@ function App() {
   )
 }
 
-export default App
+export default observer(App)

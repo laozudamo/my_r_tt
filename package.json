@@ -12,11 +12,12 @@
     "@ant-design/icons": "^4.7.0",
     "antd": "^4.21.3",
     "axios": "^0.27.2",
+    "mobx": "^6.6.2",
+    "mobx-react": "^7.5.3",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^8.0.4",
     "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
