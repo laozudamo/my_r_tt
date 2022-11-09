@@ -1,6 +1,6 @@
 import './interface.scss'
 import { useEffect, useState } from 'react'
-import { getPortInfo, upDatePort } from '@/api/devices'
+import { getPortInfo, upDatePort } from '@/api//setting/devices'
 import { Descriptions, Button, Modal, Form, Input } from 'antd'
 import tip from '@/components/Tips'
 

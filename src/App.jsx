@@ -34,7 +34,11 @@ import Fuzzy from '@/views/testCase/Fuzzy'
 
 // 模版
 import NetSource from '@/views/resource/netSource'
-import WebAttack from '@/views/resource/webAttack'
+import ResourceFuzzy from '@/views/resource/ResourceFuzzy'
+import ResourceWeb from '@/views/resource/ResourceWeb'
+import ResourceWebDet from '@/views/resource/ResourceWebDet'
+import ResourceVirus from '@/views/resource/ResourceVirus'
+import ResourceVirusDet from '@/views/resource/ResourceVirusDet'
 
 // 登录
 import Login from '@/views/login/Login'
@@ -79,7 +83,11 @@ function App() {
 
             <Route path="resource" element={<Resource />}>
               <Route path="netSource" index element={<NetSource />} />
-              <Route path="webAttack" element={<WebAttack />} />
+              <Route path="fuzzy" index element={<ResourceFuzzy />} />
+              <Route path="web" index element={<ResourceWeb />} />
+              <Route path="webDet" index element={<ResourceWebDet />} />
+              <Route path="virus" index element={<ResourceVirus />} />
+              <Route path="virusDet" index element={<ResourceVirusDet />} />
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

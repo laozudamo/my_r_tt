@@ -3,7 +3,7 @@ import './logInfo.scss'
 import { SyncOutlined } from '@ant-design/icons'
 import { Table, Button, Pagination } from 'antd'
 import { useEffect, useState } from 'react'
-import { logInfo } from '@/api/devices'
+import { logInfo } from '@/api//setting/devices'
 
 const columns = [
   {

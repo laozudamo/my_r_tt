@@ -7,20 +7,27 @@ import { useNavigate, useLocation } from 'react-router-dom'
 
 const items = [
   {
-    key: 'netSource',
+    key: '/resource/netSource',
     label: '网络拓扑模版',
     icon: <DeploymentUnitOutlined />,
   },
   {
-    key: 'webAttack',
-    label: 'web安全攻击',
+    key: '/resource/web',
+    label: 'web攻击模版',
+    icon: <DeploymentUnitOutlined />,
+  },
+  {
+    key: '/resource/virus',
+    label: '病毒攻击模版',
+    icon: <DeploymentUnitOutlined />,
+  },
+  {
+    key: '/resource/fuzzy',
+    label: '模糊攻击模版',
     icon: <DeploymentUnitOutlined />,
   },
 ]
 
-function handPath(str) {
-  return str.split('/').pop()
-}
 const Resource = () => {
   const { pathname } = useLocation()
   const [curRoute, setRoute] = useState('')
@@ -31,7 +38,7 @@ const Resource = () => {
     nav(v.key)
   }
   useEffect(() => {
-    setRoute(handPath(pathname))
+    setRoute(pathname)
   }, [location])
 
   return (

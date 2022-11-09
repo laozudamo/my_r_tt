@@ -7,7 +7,7 @@ import {
   PlusOutlined,
   CaretRightFilled,
 } from '@ant-design/icons'
-import { list, create, update, del } from '@/api/fuzzy'
+import { list, create, update, del } from '@/api/testCase/fuzzy.js'
 
 import useCommonFn from '@/components/theFun'
 

@@ -2,6 +2,7 @@ import { message } from "antd";
 import { useEffect, useState } from "react";
 import tip from './Tips.js'
 
+
 function useCommonFn ({ list, del, create, update, detail, copy, setFieldData, setAddForm, ishandleAdd = false }) {
   const [data, setData] = useState([])
 

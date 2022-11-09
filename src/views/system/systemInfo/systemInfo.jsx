@@ -1,6 +1,6 @@
 
 import './systemInfo.scss'
-import { chassisSystemInfo, getCardInfo } from '@/api/devices'
+import { chassisSystemInfo, getCardInfo } from '@/api//setting/devices'
 import { useEffect, useState } from 'react'
 import { Card, Table } from 'antd';
 

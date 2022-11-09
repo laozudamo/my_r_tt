@@ -25,7 +25,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react'
 import tip from '@/components/Tips'
 
-import { topuLists as list, topuDel, topuSave, putTopu } from '@/api/resource'
+import { list, del, create, update } from '@/api/template/netcfg.js'
 
 const nameRules = [
   {
@@ -83,7 +83,7 @@ function getCfgData(dom) {
 function saveData(p) {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await topuSave(p)
+      const res = await create(p)
       resolve(res)
     } catch (error) {
       console.log(error)
@@ -94,7 +94,7 @@ function saveData(p) {
 function editData(p) {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await putTopu(p)
+      const res = await update(p)
       resolve(res)
     } catch (error) {
       console.log(error)
@@ -130,7 +130,7 @@ export default function NetSource() {
       ids: keys,
     }
     try {
-      const res = await topuDel(data)
+      const res = await del(data)
       tip(res)
       getList(params)
     } catch (error) {
@@ -435,6 +435,7 @@ export default function NetSource() {
     )
   }
 
+
   const clientCheckboxChange = (checkedValue) => {
     setClientChecklist(checkedValue)
     // 拿到之前的数据 重新赋予值
@@ -523,7 +524,12 @@ export default function NetSource() {
       open={isModalVisible}
       onCancel={handleCancel}
       destroyOnClose={true}>
-      <Form form={form} name="name-form" layout="inline" requiredMark={false} initialValues={{'network_name': ''}}>
+      <Form
+        form={form}
+        name="name-form"
+        layout="inline"
+        requiredMark={false}
+        initialValues={{ network_name: '' }}>
         <Form.Item
           name={'network_name'}
           label={'模版名称'}

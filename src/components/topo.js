@@ -1,4 +1,4 @@
-import { topuLists } from '@/api/resource'
+import { list as topuLists } from '@/api/template/netcfg.js'
 import { useState, useEffect } from 'react'
 
 function useTopo () {

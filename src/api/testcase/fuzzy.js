@@ -24,6 +24,22 @@ export function update (data) {
   })
 }
 
+export function copy (data) {
+  return request({
+    url: 'cases/fuzz_copy',
+    method: 'post',
+    data
+  })
+}
+
+export function details (params) {
+  return request({
+    url: 'cases/fuzz_detail',
+    method: 'get',
+    params
+  })
+}
+
 export function del (data) {
   return request({
     url: 'cases/fuzz_test',
