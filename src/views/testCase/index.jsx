@@ -1,4 +1,4 @@
-import './index.scss'
+import styles from "./index.module.scss";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { Button, Menu, Image } from 'antd'
 import React, { useState, useEffect } from 'react'

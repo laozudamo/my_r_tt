@@ -3,7 +3,6 @@ import { Button } from 'antd'
 import PropTypes from 'prop-types'
 import { PlusOutlined, CloseOutlined, UndoOutlined } from '@ant-design/icons'
 
-
 function Btnbox({ addData, reflash, deleteData, isShow = true }) {
  
   return (

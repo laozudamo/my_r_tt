@@ -8,7 +8,7 @@ const info = (msg) => {
 
 // create an axios instance
 const service = axios.create({
-  baseURL: 'http://192.168.2.231:9001', // url = base url + request url
+  baseURL:'http://' + import.meta.env.VITE_BASE_API, // url = base url + request url
   timeout: 3000, // request timeout
   headers: {
     'Content-Type': 'application/json;charset=UTF-8;application/x-www-form-urlencoded'

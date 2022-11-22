@@ -55,8 +55,6 @@ function useCommonFn ({ list, del, create, update, detail, copy, setFieldData, s
     try {
       await form.validateFields()
       const value = form.getFieldValue()
-      // console.log(value)
-      // return
       const res = await update(value)
       tip(res)
       setIsModalOpen(false)
@@ -68,7 +66,6 @@ function useCommonFn ({ list, del, create, update, detail, copy, setFieldData, s
   }
 
   const editData = async (form, record) => {
-
     try {
       let params = {
         id: record.id

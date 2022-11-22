@@ -115,7 +115,6 @@ function useCommonFn ({ list, del, create, update, detail, copy, setFieldData, s
       page: page,
     }
     getList(params)
-
   }
 
   const onShowSizeChange = (current, size) => {
@@ -207,7 +206,6 @@ function useCommonFn ({ list, del, create, update, detail, copy, setFieldData, s
     editData,
     copyData,
     afterClose
-
   }
 }
 
